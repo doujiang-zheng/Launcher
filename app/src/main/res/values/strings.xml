@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Launcher</string>
+    <string name="forbidden">禁止！</string>
+    <string name="hello_world">无短信记录</string>
+</resources>
