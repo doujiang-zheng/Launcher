@@ -31,18 +31,27 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.LauncherActivity"></activity>
+        <activity android:name=".activity.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.categort.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.ContactListActivity" />
         <activity android:name=".activity.ContactRecordListActivity" />
         <activity android:name=".activity.MessageBoxList" />
         <activity android:name=".activity.PhoneCallActivity" />
         <activity android:name=".activity.SMSListActivity" />
         <activity android:name=".activity.TestMainActivity">
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
 
         <receiver

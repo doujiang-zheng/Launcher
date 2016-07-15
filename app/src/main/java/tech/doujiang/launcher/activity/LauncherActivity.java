@@ -8,11 +8,7 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.media.Image;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -25,10 +21,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.R.layout;
+import tech.doujiang.launcher.database.WorkspaceDBHelper;
 
 public class LauncherActivity extends AppCompatActivity  implements OnClickListener {
     private List<ResolveInfo> mApps;
     private List<String> forbiddenPackage;
+    private WorkspaceDBHelper dbHelper;
     GridView mGrid;
     ImageButton phone, message;
 
@@ -38,25 +36,25 @@ public class LauncherActivity extends AppCompatActivity  implements OnClickListe
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             ResolveInfo info = mApps.get(position);
-
-            String pkg = info.activityInfo.packageName;
-            if (!forbiddenPackage.contains(pkg)) {
-
-                String cls = info.activityInfo.name;
-
-                ComponentName component = new ComponentName(pkg, cls);
-
-                Intent i = new Intent();
-                i.setComponent(component);
-                startActivity(i);
-            } else {
-                new AlertDialog.Builder(LauncherActivity.this)
-                        .setIcon(R.drawable.touxiang)
-                        .setTitle(R.string.app_name)
-                        .setMessage(R.string.forbidden)
-                        .show();
-                Log.e("ForbiddenList", "This app has been forbidden!");
-            }
+//            Leave to be realized later.
+//            String pkg = info.activityInfo.packageName;
+//            if (!forbiddenPackage.contains(pkg)) {
+//
+//                String cls = info.activityInfo.name;
+//
+//                ComponentName component = new ComponentName(pkg, cls);
+//
+//                Intent i = new Intent();
+//                i.setComponent(component);
+//                startActivity(i);
+//            } else {
+//                new AlertDialog.Builder(LauncherActivity.this)
+//                        .setIcon(R.drawable.touxiang)
+//                        .setTitle(R.string.app_name)
+//                        .setMessage(R.string.forbidden)
+//                        .show();
+//                Log.e("ForbiddenList", "This app has been forbidden!");
+//            }
         }
     };
 
@@ -74,14 +72,6 @@ public class LauncherActivity extends AppCompatActivity  implements OnClickListe
         mGrid.setOnItemClickListener(listener);
         phone = (ImageButton) findViewById(R.id.phone_call);
         message = (ImageButton) findViewById(R.id.message_box);
-        phone.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(LauncherActivity.this, "Warning: 15366106759 Not in the List!", Toast.LENGTH_LONG).show();
-            }
-        });
-        Toast.makeText(this, "Warning: 15366106759 Not in the List!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -94,6 +84,9 @@ public class LauncherActivity extends AppCompatActivity  implements OnClickListe
                 break;
             case R.id.message_box:
                 intent = new Intent(this, SMSListActivity.class);
+            case R.id.db_test: {
+                dbHelper = WorkspaceDBHelper.getDBHelper(getApplicationContext());
+            }
             default:
                 break;
         }

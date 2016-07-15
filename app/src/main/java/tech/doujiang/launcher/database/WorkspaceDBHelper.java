@@ -23,6 +23,8 @@ import tech.doujiang.launcher.model.MessageBean;
 public class WorkspaceDBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "worksapce.db";
+    public static final int DB_VERSION = 1;
+    private static WorkspaceDBHelper dbHelper;
     private static final String CREATE_CONTACT = "create table Contact("
             + "id integer primary key autoincrement,"
             + "lookUpKey string,"
@@ -54,7 +56,13 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        try {
+            db.execSQL(CREATE_CALLLOG);
+            db.execSQL(CREATE_CONTACT);
+            db.execSQL(CREATE_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -62,11 +70,18 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public WorkspaceDBHelper getDBHelper() {}
+    public static WorkspaceDBHelper getDBHelper(Context context) {
+        if (dbHelper == null)
+            dbHelper = new WorkspaceDBHelper(context, DB_NAME, null, DB_VERSION);
+        return  dbHelper;
+    }
+    /*
+    Leave to realize it later.
     public void addContact(ContactBean contact) {}
     public void addCallLog(CallLogBean callLog) {}
     public void addMessage(MessageBean message) {}
     public ArrayList<ContactBean> getContact() {}
     public ArrayList<CallLogBean> getCallLog() {}
     public ArrayList<MessageBean> getMessage() {}
+    */
 }

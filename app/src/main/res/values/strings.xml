@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Launcher</string>
     <string name="forbidden">禁止！</string>
-    <string name="hello_world">无短信记录</string>
+    <string name="hello_world">Hello, world!</string>
+    <string name="phone_call">电话</string>
+    <string name="message">短信</string>
+    <string name="db_test">数据库测试</string>
 </resources>

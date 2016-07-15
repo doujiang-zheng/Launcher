@@ -9,16 +9,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activity.LauncherActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
     <GridView android:layout_width="match_parent"
         android:id="@+id/apps_list"
         android:orientation="vertical"
         android:numColumns="4"
         android:layout_height="wrap_content">
-
     </GridView>
 
     <LinearLayout
@@ -33,13 +28,21 @@
             android:id="@+id/phone_call"
             android:layout_width="100dip"
             android:layout_height="100dip"
+            android:text="@string/phone_call"
             />
 
         <ImageButton
             android:id="@+id/message_box"
             android:layout_width="100dip"
             android:layout_height="100dip"
+            android:text="@string/message"
              />
 
+        <ImageButton
+            android:id="@+id/db_test"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:text="@string/db_test"
+            />
     </LinearLayout>
 </RelativeLayout>
