@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "tech.doujiang.launcher"
-        minSdkVersion 11
-        targetSdkVersion 24
+        minSdkVersion 8
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }

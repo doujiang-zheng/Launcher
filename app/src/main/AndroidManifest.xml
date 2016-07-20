@@ -3,8 +3,8 @@
     package="tech.doujiang.launcher">
 
     <uses-sdk
-        android:minSdkVersion="11"
-        android:targetSdkVersion="23" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="20" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -34,6 +34,7 @@
         <activity android:name=".activity.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.categort.DEFAULT" />
@@ -45,6 +46,7 @@
         <activity android:name=".activity.PhoneCallActivity" />
         <activity android:name=".activity.SMSListActivity" />
         <activity android:name=".activity.TestMainActivity">
+
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,7 +59,11 @@
         <receiver
             android:name=".Receiver.BootReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+        <receiver
+            android:name=".Receiver.CallReceiver"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
