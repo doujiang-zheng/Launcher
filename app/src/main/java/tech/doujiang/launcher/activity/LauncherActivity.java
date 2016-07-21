@@ -66,10 +66,10 @@ public class LauncherActivity extends AppCompatActivity  implements OnClickListe
         // setContentView(R.layout.main);
         getForbiddenPackage();
         setContentView(R.layout.activity_launcher);
-        mGrid = (GridView) findViewById(R.id.apps_list);
-        mGrid.setAdapter(new AppsAdapter());
-
-        mGrid.setOnItemClickListener(listener);
+//        mGrid = (GridView) findViewById(R.id.apps_list);
+//        mGrid.setAdapter(new AppsAdapter());
+//
+//        mGrid.setOnItemClickListener(listener);
         phone = (ImageButton) findViewById(R.id.phone_call);
         message = (ImageButton) findViewById(R.id.message_box);
     }

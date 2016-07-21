@@ -5,9 +5,11 @@ package tech.doujiang.launcher.model;
  */
 public class MessageBean {
 
+    private int id;
     private String name;
     private String date;
     private String text;
+    private int type;
     private int layoutID;
     private boolean is_read;
 
@@ -60,5 +62,21 @@ public class MessageBean {
 
     public void setIs_read(boolean is_read) {
         this.is_read = is_read;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

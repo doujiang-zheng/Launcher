@@ -60,12 +60,12 @@ public class CallLogBean {
         this.type = type;
     }
 
-   public void getDuration(int duration) {
-       this.duration = duration;
+   public int getDuration() {
+       return duration;
    }
 
-    public int setDuration(int duration) {
-        return duration;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public CallLogBean() {
