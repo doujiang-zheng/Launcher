@@ -35,11 +35,8 @@ public class SMSListActivity extends AppCompatActivity {
         smsAdapter = new SMSAdapter(SMSListActivity.this);
         rsms = new RexseeSMS(SMSListActivity.this);
         List<SMSBean> list_mmt = rsms.getThreadsNum(rsms.getThreads(0));
-        // ×¢Èë¶ÌÐÅÁÐ±íÊý¾Ý
         smsAdapter.assignment(list_mmt);
-        // Ìî³äÊý¾Ý
         smsListView.setAdapter(smsAdapter);
-        // ¶ÌÐÅÁÐ±íÏîµã»÷ÊÂ¼þ
         smsListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override

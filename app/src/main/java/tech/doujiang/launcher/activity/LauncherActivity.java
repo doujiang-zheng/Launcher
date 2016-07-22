@@ -16,19 +16,19 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.R.layout;
 import tech.doujiang.launcher.database.WorkspaceDBHelper;
 
-public class LauncherActivity extends AppCompatActivity  implements OnClickListener {
+public class LauncherActivity extends Activity  implements OnClickListener {
     private List<ResolveInfo> mApps;
     private List<String> forbiddenPackage;
     private WorkspaceDBHelper dbHelper;
     GridView mGrid;
-    ImageButton phone, message;
+    Button phone, message;
 
     private OnItemClickListener listener = new OnItemClickListener() {
 
@@ -36,25 +36,25 @@ public class LauncherActivity extends AppCompatActivity  implements OnClickListe
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             ResolveInfo info = mApps.get(position);
-//            Leave to be realized later.
-//            String pkg = info.activityInfo.packageName;
-//            if (!forbiddenPackage.contains(pkg)) {
-//
-//                String cls = info.activityInfo.name;
-//
-//                ComponentName component = new ComponentName(pkg, cls);
-//
-//                Intent i = new Intent();
-//                i.setComponent(component);
-//                startActivity(i);
-//            } else {
-//                new AlertDialog.Builder(LauncherActivity.this)
-//                        .setIcon(R.drawable.touxiang)
-//                        .setTitle(R.string.app_name)
-//                        .setMessage(R.string.forbidden)
-//                        .show();
-//                Log.e("ForbiddenList", "This app has been forbidden!");
-//            }
+            //Leave to be realized later.
+            String pkg = info.activityInfo.packageName;
+            if (!forbiddenPackage.contains(pkg)) {
+
+                String cls = info.activityInfo.name;
+
+                ComponentName component = new ComponentName(pkg, cls);
+
+                Intent i = new Intent();
+                i.setComponent(component);
+                startActivity(i);
+            } else {
+                new AlertDialog.Builder(LauncherActivity.this)
+                        .setIcon(R.drawable.touxiang)
+                        .setTitle(R.string.app_name)
+                        .setMessage(R.string.forbidden)
+                        .show();
+                Log.e("ForbiddenList", "This app has been forbidden!");
+            }
         }
     };
 
@@ -63,15 +63,14 @@ public class LauncherActivity extends AppCompatActivity  implements OnClickListe
         super.onCreate(savedInstanceState);
 
         loadApps();
-        // setContentView(R.layout.main);
-        getForbiddenPackage();
         setContentView(R.layout.activity_launcher);
-//        mGrid = (GridView) findViewById(R.id.apps_list);
-//        mGrid.setAdapter(new AppsAdapter());
-//
-//        mGrid.setOnItemClickListener(listener);
-        phone = (ImageButton) findViewById(R.id.phone_call);
-        message = (ImageButton) findViewById(R.id.message_box);
+        getForbiddenPackage();
+        mGrid = (GridView) findViewById(R.id.apps_list);
+        mGrid.setAdapter(new AppsAdapter());
+        mGrid.setOnItemClickListener(listener);
+
+        phone = (Button) findViewById(R.id.phone_call);
+        message = (Button) findViewById(R.id.message_box);
     }
 
     @Override
@@ -86,19 +85,21 @@ public class LauncherActivity extends AppCompatActivity  implements OnClickListe
                 intent = new Intent(this, SMSListActivity.class);
             case R.id.db_test: {
                 dbHelper = WorkspaceDBHelper.getDBHelper(getApplicationContext());
+
             }
             default:
                 break;
         }
-        startActivity(intent);
+        if (intent != null)
+            startActivity(intent);
     }
 
 
 
-    private void getForbiddenPackage() {
-        forbiddenPackage = new ArrayList<String>();
+    private ArrayList<String> getForbiddenPackage() {
+        ArrayList<String> forbiddenPackage = new ArrayList<String>();
         forbiddenPackage.add("com.guoshisp.mobilesafe");
-        return;
+        return forbiddenPackage;
     }
 
     private void loadApps() {
@@ -116,25 +117,21 @@ public class LauncherActivity extends AppCompatActivity  implements OnClickListe
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
             return mApps.size();
         }
 
         @Override
         public Object getItem(int position) {
-            // TODO Auto-generated method stub
             return mApps.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            // TODO Auto-generated method stub
             return position;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
             ImageView i;
 
             if (convertView == null) {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Service;
+import android.app.IntentService;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -27,12 +28,23 @@ import com.android.internal.telephony.ITelephony;
 *       （1）对来电、去电进行检查，在工作区通讯录内即挂断
 *       （2）对发送、接收短信进行检查，在工作区通讯录内即删除另存到工作区数据库
 *      */
-public class CallSmsFirewallService extends Service {
+public class CallSmsFirewallService extends IntentService {
     public static final String TAG = "CallSmsFirewallService";
     //private InnerSmsReceiver receiver;
     private ArrayList<String> dao;
     private PhoneListener listener;
+
     private TelephonyManager tm;
+
+    public CallSmsFirewallService(String name) {
+        super(name);
+    }
+
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+
+    }
 
     @Override
     public void onCreate() {

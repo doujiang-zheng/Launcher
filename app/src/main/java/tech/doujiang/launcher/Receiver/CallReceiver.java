@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.telephony.PhoneStateListener;
 
 public class CallReceiver extends BroadcastReceiver {
-    private final PhoneStateListener mPhoneListener;
+    private PhoneStateListener mPhoneListener = null;
+
+    public CallReceiver() {
+
+    }
 
     public CallReceiver(PhoneStateListener phoneListener) {
         this.mPhoneListener = phoneListener;
