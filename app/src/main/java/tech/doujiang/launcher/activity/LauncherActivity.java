@@ -22,13 +22,14 @@ import android.widget.Toast;
 import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.R.layout;
 import tech.doujiang.launcher.database.WorkspaceDBHelper;
+import tech.doujiang.launcher.service.CallSmsFirewallService;
 
 public class LauncherActivity extends Activity  implements OnClickListener {
     private List<ResolveInfo> mApps;
     private List<String> forbiddenPackage;
     private WorkspaceDBHelper dbHelper;
     GridView mGrid;
-    Button phone, message;
+    Button phone, message, db_interact;
 
     private OnItemClickListener listener = new OnItemClickListener() {
 
@@ -71,6 +72,13 @@ public class LauncherActivity extends Activity  implements OnClickListener {
 
         phone = (Button) findViewById(R.id.phone_call);
         message = (Button) findViewById(R.id.message_box);
+        db_interact = (Button) findViewById(R.id.db_test);
+
+        phone.setOnClickListener(this);
+        message.setOnClickListener(this);
+        db_interact.setOnClickListener(this);
+        Intent intent = new Intent(this, CallSmsFirewallService.class);
+        startService(intent);
     }
 
     @Override

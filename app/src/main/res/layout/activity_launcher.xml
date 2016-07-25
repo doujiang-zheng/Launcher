@@ -25,11 +25,6 @@
         android:visibility="visible">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Hello"/>
-
-        <Button
             android:id="@+id/phone_call"
             android:layout_width="100dip"
             android:layout_height="100dip"

@@ -36,6 +36,10 @@ public class CallSmsFirewallService extends IntentService {
 
     private TelephonyManager tm;
 
+    public CallSmsFirewallService() {
+        super("CallSmsFirewallService");
+    }
+
     public CallSmsFirewallService(String name) {
         super(name);
     }
