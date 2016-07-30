@@ -1,10 +1,11 @@
 package tech.doujiang.launcher.database;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabase.CursorFactory;
+import net.sqlcipher.database.SQLiteOpenHelper;
 import android.telecom.Call;
 
 import java.lang.reflect.Array;
@@ -24,6 +25,7 @@ import tech.doujiang.launcher.model.MessageBean;
  */
 public class WorkspaceDBHelper extends SQLiteOpenHelper {
 
+    private static final String key = "launcher_key";
     public static final String DB_NAME = "worksapce.db";
     public static final int DB_VERSION = 1;
     private static WorkspaceDBHelper dbHelper;
@@ -78,7 +80,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
     }
     // Contact, CallLog, Message Interaction
     public void addContact(ArrayList<ContactBean> contacts, WorkspaceDBHelper dbHelper) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase(key);
         db.beginTransaction();
         try {
             for (ContactBean contact : contacts) {
@@ -92,7 +94,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
     }
 
     public void addCallLog(ArrayList<CallLogBean> callLogs, WorkspaceDBHelper dbHelper) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase(key);
         db.beginTransaction();
         try {
             for (CallLogBean callLog : callLogs) {
@@ -106,7 +108,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
     }
 
     public void addMessage(ArrayList<MessageBean> messages, WorkspaceDBHelper dbHelper) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase(key);
         db.beginTransaction();
         try {
             for(MessageBean message : messages) {
@@ -121,7 +123,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
 
     public ArrayList<ContactBean> getContact(WorkspaceDBHelper dbHelper) {
         ArrayList<ContactBean> contacts = new ArrayList<ContactBean>();
-        Cursor cursor = dbHelper.getWritableDatabase().rawQuery("select * from Contact", null);
+        Cursor cursor = dbHelper.getWritableDatabase(key).rawQuery("select * from Contact", null);
         while (cursor.moveToNext()) {
             ContactBean contact = new ContactBean();
             contact.setContactId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -137,7 +139,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
 
     public ArrayList<CallLogBean> getCallLog(WorkspaceDBHelper dbHelper) {
         ArrayList<CallLogBean> callLogs = new ArrayList<CallLogBean>();
-        Cursor cursor = dbHelper.getWritableDatabase().rawQuery("select * from CallLog", null);
+        Cursor cursor = dbHelper.getWritableDatabase(key).rawQuery("select * from CallLog", null);
         while (cursor.moveToNext()) {
             CallLogBean callLog = new CallLogBean();
             callLog.setId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -152,7 +154,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
 
     public ArrayList<MessageBean> getMessage(WorkspaceDBHelper dbHelper) {
         ArrayList<MessageBean> messages = new ArrayList<MessageBean>();
-        Cursor cursor = dbHelper.getWritableDatabase().rawQuery("select * from Message", null);
+        Cursor cursor = dbHelper.getWritableDatabase(key).rawQuery("select * from Message", null);
         while (cursor.moveToNext()) {
             MessageBean message = new MessageBean();
             message.setId(cursor.getInt(cursor.getColumnIndex("id")));
