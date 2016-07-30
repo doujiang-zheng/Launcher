@@ -70,8 +70,8 @@ public class LauncherActivity extends Activity  implements OnClickListener {
 //        mGrid.setAdapter(new AppsAdapter());
 //        mGrid.setOnItemClickListener(listener);
 
-        phone = (Button) findViewById(R.id.phone_call);
-        message = (Button) findViewById(R.id.message_box);
+        phone = (Button) findViewById(R.id.phone_app);
+        message = (Button) findViewById(R.id.message_app);
         db_interact = (Button) findViewById(R.id.db_test);
 
         phone.setOnClickListener(this);

@@ -4,11 +4,9 @@ import java.util.*;
 
 //import org.apache.commons.beanutils.Converter;
 
-import android.R.integer;
 import android.content.*;
 import android.net.Uri;
 //import android.support.annotation.CallSuper;
-import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -49,7 +47,7 @@ public class DialAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.contact_record_list_item
+            convertView = inflater.inflate(R.layout.call_log_list_item
                     , null);
             holder = new ViewHolder();
             holder.call_type = (ImageView) convertView.findViewById(R.id.call_type);

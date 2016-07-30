@@ -44,7 +44,7 @@
 
         </activity>
 
-        <activity android:name=".activity.ContactRecordListActivity" />
+        <activity android:name=".activity.CallLogListActivity" />
         <activity android:name=".activity.MessageBoxList" />
         <activity android:name=".activity.SMSListActivity" />
 

@@ -4,25 +4,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import android.R.integer;
-import android.app.Activity;
+
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.CallLog;
 import android.widget.ListView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import tech.doujiang.launcher.adapter.DialAdapter;
 import tech.doujiang.launcher.model.CallLogBean;
 import tech.doujiang.launcher.R;
-import tech.doujiang.launcher.R.layout;
 
-public class ContactRecordListActivity extends AppCompatActivity {
+public class CallLogListActivity extends AppCompatActivity {
 
     private ListView callLogListView;
     private AsyncQueryHandler asyncQuery;
@@ -32,7 +26,7 @@ public class ContactRecordListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contact_record_list);
+        setContentView(R.layout.call_log_list);
 
         callLogListView = (ListView) findViewById(R.id.call_log_list);
         asyncQuery = new MyAsyncQueryHandler(getContentResolver());
