@@ -25,14 +25,14 @@
         android:visibility="visible">
 
         <Button
-            android:id="@+id/phone_call"
+            android:id="@+id/phone_app"
             android:layout_width="100dip"
             android:layout_height="100dip"
             android:text="@string/phone_call"
             />
 
         <Button
-            android:id="@+id/message_box"
+            android:id="@+id/message_app"
             android:layout_width="100dip"
             android:layout_height="100dip"
             android:text="@string/message"

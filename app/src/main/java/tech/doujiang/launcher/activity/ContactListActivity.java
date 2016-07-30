@@ -61,6 +61,11 @@ public class ContactListActivity extends AppCompatActivity {
                 "sort_key COLLATE LOCALIZED asc");
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     private class MyAsyncQueryHandler extends AsyncQueryHandler {
         private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 

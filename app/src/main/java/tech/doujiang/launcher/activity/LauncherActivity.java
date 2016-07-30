@@ -31,33 +31,33 @@ public class LauncherActivity extends Activity  implements OnClickListener {
     GridView mGrid;
     Button phone, message, db_interact;
 
-    private OnItemClickListener listener = new OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            ResolveInfo info = mApps.get(position);
-            //Leave to be realized later.
-            String pkg = info.activityInfo.packageName;
-            if (!forbiddenPackage.contains(pkg)) {
-
-                String cls = info.activityInfo.name;
-
-                ComponentName component = new ComponentName(pkg, cls);
-
-                Intent i = new Intent();
-                i.setComponent(component);
-                startActivity(i);
-            } else {
-                new AlertDialog.Builder(LauncherActivity.this)
-                        .setIcon(R.drawable.touxiang)
-                        .setTitle(R.string.app_name)
-                        .setMessage(R.string.forbidden)
-                        .show();
-                Log.e("ForbiddenList", "This app has been forbidden!");
-            }
-        }
-    };
+//    private OnItemClickListener listener = new OnItemClickListener() {
+//
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position,
+//                                long id) {
+//            ResolveInfo info = mApps.get(position);
+//            //Leave to be realized later.
+//            String pkg = info.activityInfo.packageName;
+//            if (!forbiddenPackage.contains(pkg)) {
+//
+//                String cls = info.activityInfo.name;
+//
+//                ComponentName component = new ComponentName(pkg, cls);
+//
+//                Intent i = new Intent();
+//                i.setComponent(component);
+//                startActivity(i);
+//            } else {
+//                new AlertDialog.Builder(LauncherActivity.this)
+//                        .setIcon(R.drawable.touxiang)
+//                        .setTitle(R.string.app_name)
+//                        .setMessage(R.string.forbidden)
+//                        .show();
+//                Log.e("ForbiddenList", "This app has been forbidden!");
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +66,9 @@ public class LauncherActivity extends Activity  implements OnClickListener {
         loadApps();
         setContentView(R.layout.activity_launcher);
         getForbiddenPackage();
-        mGrid = (GridView) findViewById(R.id.apps_list);
-        mGrid.setAdapter(new AppsAdapter());
-        mGrid.setOnItemClickListener(listener);
+//        mGrid = (GridView) findViewById(R.id.apps_list);
+//        mGrid.setAdapter(new AppsAdapter());
+//        mGrid.setOnItemClickListener(listener);
 
         phone = (Button) findViewById(R.id.phone_call);
         message = (Button) findViewById(R.id.message_box);
@@ -83,14 +83,14 @@ public class LauncherActivity extends Activity  implements OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(this, "Warning: 15366106759 Not in the List!", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Warning: 15366106759 Not in the List!", Toast.LENGTH_LONG).show();
         Intent intent = null;
         switch (view.getId()) {
-            case R.id.phone_call:
-                intent = new Intent(this, ContactListActivity.class);
+            case R.id.phone_app:
+                intent = new Intent(this, PhoneAppActivity.class);
                 break;
-            case R.id.message_box:
-                intent = new Intent(this, SMSListActivity.class);
+            case R.id.message_app:
+                intent = new Intent(this, SmsAppActivity.class);
             case R.id.db_test: {
                 dbHelper = WorkspaceDBHelper.getDBHelper(getApplicationContext());
 
@@ -106,6 +106,7 @@ public class LauncherActivity extends Activity  implements OnClickListener {
 
     private ArrayList<String> getForbiddenPackage() {
         ArrayList<String> forbiddenPackage = new ArrayList<String>();
+        // Just a sample.
         forbiddenPackage.add("com.guoshisp.mobilesafe");
         return forbiddenPackage;
     }
@@ -118,43 +119,43 @@ public class LauncherActivity extends Activity  implements OnClickListener {
         mApps.clear();
     }
 
-    public class AppsAdapter extends BaseAdapter {
-        public AppsAdapter() {
-
-        }
-
-        @Override
-        public int getCount() {
-            return mApps.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mApps.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView i;
-
-            if (convertView == null) {
-                i = new ImageView(LauncherActivity.this);
-                i.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                i.setLayoutParams(new GridView.LayoutParams(100,100));
-            } else {
-                i = (ImageView) convertView;
-            }
-
-            ResolveInfo info = mApps.get(position);
-            i.setImageDrawable(info.activityInfo.loadIcon(getPackageManager()));
-
-            return i;
-        }
-
-    }
+//    public class AppsAdapter extends BaseAdapter {
+//        public AppsAdapter() {
+//
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return mApps.size();
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return mApps.get(position);
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            ImageView i;
+//
+//            if (convertView == null) {
+//                i = new ImageView(LauncherActivity.this);
+//                i.setScaleType(ImageView.ScaleType.FIT_CENTER);
+//                i.setLayoutParams(new GridView.LayoutParams(100,100));
+//            } else {
+//                i = (ImageView) convertView;
+//            }
+//
+//            ResolveInfo info = mApps.get(position);
+//            i.setImageDrawable(info.activityInfo.loadIcon(getPackageManager()));
+//
+//            return i;
+//        }
+//
+//    }
 }
