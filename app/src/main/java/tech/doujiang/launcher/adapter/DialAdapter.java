@@ -64,16 +64,15 @@ public class DialAdapter extends BaseAdapter{
         switch (callLog.getType()) {
             case 1:
                 holder.call_type
-                        .setBackgroundResource(R.drawable.touxiang);
+                        .setBackgroundResource(R.drawable.call_in);
                 break;
             case 2:
-                //Log.e("e", "HOLDER HERE!");
                 holder.call_type
-                        .setBackgroundResource(R.drawable.touxiang);
+                        .setBackgroundResource(R.drawable.call_out);
                 break;
             case 3:
                 holder.call_type
-                        .setBackgroundResource(R.drawable.touxiang);
+                        .setBackgroundResource(R.drawable.call_off);
                 break;
             default:
                 break;

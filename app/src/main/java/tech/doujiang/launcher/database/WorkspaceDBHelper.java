@@ -75,6 +75,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
 
     public static WorkspaceDBHelper getDBHelper(Context context) {
         if (dbHelper == null)
+            SQLiteDatabase.loadLibs(context);
             dbHelper = new WorkspaceDBHelper(context, DB_NAME, null, DB_VERSION);
         return  dbHelper;
     }

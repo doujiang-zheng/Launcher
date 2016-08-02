@@ -92,7 +92,7 @@ public class ContactListAdapter extends BaseAdapter{
         holder.quickContactBadge.assignContactUri(ContactsContract.Contacts.getLookupUri(
               contact.getContactId(), contact.getLookUpKey()));
         if (0 == contact.getPhotoId()) {
-            holder.quickContactBadge.setImageResource(R.drawable.touxiang);
+            holder.quickContactBadge.setImageResource(R.drawable.contact);
         } else {
             Uri uri = ContentUris.withAppendedId(
                     ContactsContract.Contacts.CONTENT_URI,

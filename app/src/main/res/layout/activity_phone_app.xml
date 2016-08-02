@@ -9,6 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="tech.doujiang.launcher.activity.PhoneAppActivity">
 
+    <SearchView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="输入姓名或电话号码">
+    </SearchView>
+
     <FrameLayout
         android:id="@+id/phone_content"
         android:layout_width="match_parent"
@@ -17,6 +25,6 @@
         android:background="@color/white">
     </FrameLayout>
 
-    <include layout="@layout/phone_bottom" />
+    <include layout="@layout/phone_bottom"/>
 
 </RelativeLayout>

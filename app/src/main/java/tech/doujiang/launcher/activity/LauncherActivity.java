@@ -29,7 +29,7 @@ public class LauncherActivity extends Activity  implements OnClickListener {
     private List<String> forbiddenPackage;
     private WorkspaceDBHelper dbHelper;
     GridView mGrid;
-    Button phone, message, db_interact;
+    Button phone, message, db_interact, add_contact;
 
 //    private OnItemClickListener listener = new OnItemClickListener() {
 //
@@ -73,10 +73,12 @@ public class LauncherActivity extends Activity  implements OnClickListener {
         phone = (Button) findViewById(R.id.phone_app);
         message = (Button) findViewById(R.id.message_app);
         db_interact = (Button) findViewById(R.id.db_test);
+        add_contact = (Button) findViewById(R.id.add_contact);
 
         phone.setOnClickListener(this);
         message.setOnClickListener(this);
         db_interact.setOnClickListener(this);
+        add_contact.setOnClickListener(this);
         Intent intent = new Intent(this, CallSmsFirewallService.class);
         startService(intent);
     }
@@ -91,10 +93,14 @@ public class LauncherActivity extends Activity  implements OnClickListener {
                 break;
             case R.id.message_app:
                 intent = new Intent(this, SmsAppActivity.class);
-            case R.id.db_test: {
+                break;
+            case R.id.db_test:
                 dbHelper = WorkspaceDBHelper.getDBHelper(getApplicationContext());
-
-            }
+                break;
+            case R.id.add_contact:
+                intent = new Intent(this, AddContactActivity.class);
+                Log.e("ADD_CONTACT", "add contact");
+                break;
             default:
                 break;
         }

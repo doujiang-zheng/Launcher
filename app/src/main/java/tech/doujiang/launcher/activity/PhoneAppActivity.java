@@ -1,5 +1,6 @@
 package tech.doujiang.launcher.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +14,8 @@ import java.util.List;
 
 import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.adapter.ContentAdapter;
+import tech.doujiang.launcher.fragment.CallLogListFragment;
+import tech.doujiang.launcher.fragment.ContactListFragment;
 
 public class PhoneAppActivity extends FragmentActivity implements View.OnClickListener {
 
@@ -48,8 +51,8 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
     }
 
     private void restartButton() {
-        text_call_log.setTextColor(getColor(R.color.grey));
-        text_contact.setTextColor(getColor(R.color.grey));
+        text_call_log.setTextColor(Color.GRAY);
+        text_contact.setTextColor(Color.GRAY);
     }
 
     @Override
@@ -69,16 +72,16 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
         hideFragment(transaction);
         switch (index) {
             case 0:
-                if (callLogFragment != null) {
-                    callLogFragment = new CallLogListActivity();
+                if (callLogFragment == null) {
+                    callLogFragment = new CallLogListFragment();
                     transaction.add(R.id.phone_content, callLogFragment);
                 } else {
                     transaction.show(callLogFragment);
                 }
                 break;
             case 1:
-                if (contactFragment != null) {
-                    contactFragment = new ContactListActivity();
+                if (contactFragment == null) {
+                    contactFragment = new ContactListFragment();
                     transaction.add(R.id.phone_content, contactFragment);
                 } else {
                     transaction.show(contactFragment);

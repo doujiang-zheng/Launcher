@@ -26,23 +26,30 @@
 
         <Button
             android:id="@+id/phone_app"
-            android:layout_width="100dip"
-            android:layout_height="100dip"
-            android:text="@string/phone_call"
-            />
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/phone_call" />
 
         <Button
             android:id="@+id/message_app"
-            android:layout_width="100dip"
-            android:layout_height="100dip"
-            android:text="@string/message"
-             />
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/message"/>
 
         <Button
             android:id="@+id/db_test"
-            android:layout_width="100dip"
-            android:layout_height="100dip"
-            android:text="@string/db_test"
-            />
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/db_test" />
+
+        <Button
+            android:id="@+id/add_contact"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="@string/add_contact"/>
     </LinearLayout>
 </RelativeLayout>
