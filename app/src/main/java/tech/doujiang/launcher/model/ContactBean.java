@@ -7,12 +7,18 @@ public class ContactBean {
     private int contactId;
     private String displayName;
     private String phoneNum;
-    private String sortKey;
-    private Long photoId;
-    private String lookUpKey;
+    private String photoPath;
     private int selectId = 0;
-    private String formattedNumber;
     private String pinYin;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public int getContactId() {
         return contactId;
@@ -32,21 +38,12 @@ public class ContactBean {
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
     }
-    public String getSortKey() {
-        return sortKey;
-    }
 
-    public Long getPhotoId() {
-        return photoId;
+    public String getPhotoPath() {
+        return photoPath;
     }
-    public void setPhotoId(Long photoId) {
-        this.photoId = photoId;
-    }
-    public String getLookUpKey() {
-        return lookUpKey;
-    }
-    public void setLookUpKey(String lookUpKey) {
-        this.lookUpKey = lookUpKey;
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
     public int getSelectId() {
         return selectId;
@@ -54,21 +51,10 @@ public class ContactBean {
     public void setSelectId(int selectId) {
         this.selectId = selectId;
     }
-    public String getFormattedNumber() {
-        return formattedNumber;
-    }
-    public void setFormattedNumber(String formattedNumber) {
-        this.formattedNumber = formattedNumber;
-    }
     public String getPinYin() {
         return pinYin;
     }
     public void setPinYin(String pinYin) {
         this.pinYin = pinYin;
     }
-    public void setSortkey(String sortKey) {
-        this.sortKey = sortKey;
-
-    }
-
 }

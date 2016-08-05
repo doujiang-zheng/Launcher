@@ -43,76 +43,10 @@ public class ContactListActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
         }
-        asyncQueryHandler = new MyAsyncQueryHandler(getContentResolver());
         init();
     }
 
     public void init() {
-        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-
-        String[] projection = { ContactsContract.CommonDataKinds.Phone._ID,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Phone.DATA1, "sort_key",
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-                ContactsContract.CommonDataKinds.Phone.PHOTO_ID,
-                ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY };
-
-        asyncQueryHandler.startQuery(0, null, uri, projection, null, null,
-                "sort_key COLLATE LOCALIZED asc");
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    private class MyAsyncQueryHandler extends AsyncQueryHandler {
-        private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
-
-        public MyAsyncQueryHandler(ContentResolver cr) {
-            super(cr);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
-            }
-        }
-
-        @Override
-        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-
-            if (cursor != null && cursor.getCount() > 0) {
-                contactIdMap = new HashMap<Integer, ContactBean>();
-                list = new ArrayList<ContactBean>();
-                cursor.moveToFirst();
-                for (int i = 0; i < cursor.getCount(); i ++) {
-                    cursor.moveToPosition(i);
-                    String name = cursor.getString(1);
-                    String number = cursor.getString(2);
-                    String sortKey = cursor.getString(3);
-                    int contactId = cursor.getInt(4);
-                    Long photoId = cursor.getLong(5);
-                    String lookUpKey = cursor.getString(6);
-
-                    if (contactIdMap.containsKey(contactId)) {
-
-                    } else {
-
-                        ContactBean contact = new ContactBean();
-                        contact.setDisplayName(name);
-                        contact.setPhoneNum(number);
-                        contact.setSortkey(sortKey);
-                        contact.setPhotoId(photoId);
-                        contact.setLookUpKey(lookUpKey);
-                        list.add(contact);
-
-                        contactIdMap.put(contactId, contact);
-                    }
-                }
-                if (list.size() > 0) {
-                    setAdapter(list);
-                }
-            }
-            super.onQueryComplete(token, cookie, cursor);
-        }
 
     }
 

@@ -34,7 +34,7 @@ public class ContactListAdapter extends BaseAdapter{
         this.sections = new String[list.size()];
 
         for(int i = 0; i < list.size(); i ++) {
-            String name = getAlpha(list.get(i).getSortKey());
+            String name = getAlpha(list.get(i).getPinYin());
             if (!alphaIndexer.containsKey(name)) {
                 alphaIndexer.put(name, i);
             }
@@ -73,8 +73,7 @@ public class ContactListAdapter extends BaseAdapter{
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.contact_list_item, null);
             holder = new ViewHolder();
-            holder.quickContactBadge = (QuickContactBadge) convertView
-                    .findViewById(R.id.qcb);
+            holder.photo = (ImageView) convertView.findViewById(R.id.photo);
             holder.alpha = (TextView) convertView.findViewById(R.id.alpha);
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.number = (TextView) convertView.findViewById(R.id.number);
@@ -89,24 +88,17 @@ public class ContactListAdapter extends BaseAdapter{
         holder.name.setText(name);
         holder.number.setText(number);
 
-        holder.quickContactBadge.assignContactUri(ContactsContract.Contacts.getLookupUri(
-              contact.getContactId(), contact.getLookUpKey()));
-        if (0 == contact.getPhotoId()) {
-            holder.quickContactBadge.setImageResource(R.drawable.contact);
+        if (contact.getPhotoPath() != null && !contact.getPhotoPath().isEmpty()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(contact.getPhotoPath());
+            holder.photo.setImageBitmap(bitmap);
         } else {
-            Uri uri = ContentUris.withAppendedId(
-                    ContactsContract.Contacts.CONTENT_URI,
-                    contact.getContactId());
-            InputStream input = ContactsContract.Contacts
-                    .openContactPhotoInputStream(ctx.getContentResolver(), uri);
-            Bitmap contactPhoto = BitmapFactory.decodeStream(input);
-            holder.quickContactBadge.setImageBitmap(contactPhoto);
+            holder.photo.setImageResource(R.drawable.contact);
         }
 
-        String currentStr = getAlpha(contact.getSortKey());
+        String currentStr = getAlpha(contact.getPinYin());
 
         String previewStr = (position - 1) >= 0 ?
-                getAlpha(list.get(position - 1).getSortKey()) : " ";
+                getAlpha(list.get(position - 1).getPinYin()) : " ";
 
         if (!previewStr.equals(currentStr)) {
             holder.alpha.setVisibility(View.VISIBLE);
@@ -118,7 +110,7 @@ public class ContactListAdapter extends BaseAdapter{
     }
 
     private static class ViewHolder {
-        QuickContactBadge quickContactBadge;
+        ImageView photo;
         TextView alpha;
         TextView name;
         TextView number;

@@ -7,6 +7,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteDatabase.CursorFactory;
 import net.sqlcipher.database.SQLiteOpenHelper;
 import android.telecom.Call;
+import android.util.Log;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -31,10 +32,11 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
     private static WorkspaceDBHelper dbHelper;
     private static final String CREATE_CONTACT = "create table Contact("
             + "id integer primary key autoincrement,"
-            + "lookUpKey string,"
             + "name string,"
             + "number string,"
-            + "photoId integer"
+            + "photoPath string,"
+            + "email string,"
+            + "pinYin string"
             + ");";
     private static final String CREATE_CALLLOG = "create table CallLog("
             + "id integer,"
@@ -60,9 +62,12 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
-            db.execSQL(CREATE_CALLLOG);
             db.execSQL(CREATE_CONTACT);
+            Log.e("db: ", CREATE_CONTACT);
+            db.execSQL(CREATE_CALLLOG);
+            Log.e("db: ", CREATE_CALLLOG);
             db.execSQL(CREATE_MESSAGE);
+            Log.e("db: ", CREATE_MESSAGE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,42 +85,36 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         return  dbHelper;
     }
     // Contact, CallLog, Message Interaction
-    public void addContact(ArrayList<ContactBean> contacts, WorkspaceDBHelper dbHelper) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase(key);
+    public void addContact(ContactBean contact) {
+        SQLiteDatabase db = this.getReadableDatabase(key);
         db.beginTransaction();
         try {
-            for (ContactBean contact : contacts) {
-                db.execSQL("INSERT INTO Contact VALUES(?, ?, ?, ?)",
-                        new Object[]{contact.getLookUpKey(), contact.getDisplayName(), contact.getPhoneNum(), contact.getPhotoId()});
-            }
+            db.execSQL("INSERT INTO Contact(name, number, photoPath, email, pinYin) VALUES(?, ?, ?, ?, ?)",
+                    new Object[]{contact.getDisplayName(), contact.getPhoneNum(), contact.getPhotoPath(), contact.getEmail(), contact.getPinYin()});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
     }
 
-    public void addCallLog(ArrayList<CallLogBean> callLogs, WorkspaceDBHelper dbHelper) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase(key);
+    public void addCallLog(CallLogBean callLog) {
+        SQLiteDatabase db = this.getWritableDatabase(key);
         db.beginTransaction();
         try {
-            for (CallLogBean callLog : callLogs) {
-                db.execSQL("INSERT INTO CallLog VALUES(?, ?, ?, ?)",
-                        new Object[]{callLog.getId(), callLog.getDate(), callLog.getDuration(), callLog.getType()});
-            }
+            db.execSQL("INSERT INTO CallLog(id, date, duration, type) VALUES(?, ?, ?, ?)",
+                    new Object[]{callLog.getId(), callLog.getDate(), callLog.getDuration(), callLog.getType()});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
     }
 
-    public void addMessage(ArrayList<MessageBean> messages, WorkspaceDBHelper dbHelper) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase(key);
+    public void addMessage(MessageBean message) {
+        SQLiteDatabase db = this.getWritableDatabase(key);
         db.beginTransaction();
         try {
-            for(MessageBean message : messages) {
-                db.execSQL("INSET INTO Message VALUES(?, ?, ?, ?)",
-                        new Object[]{message.getId(), message.getDate(), message.getText(), message.getType()});
-            }
+            db.execSQL("INSET INTO Message(id, date, text, type) VALUES(?, ?, ?, ?)",
+                    new Object[]{message.getId(), message.getDate(), message.getText(), message.getType()});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -128,13 +127,14 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             ContactBean contact = new ContactBean();
             contact.setContactId(cursor.getInt(cursor.getColumnIndex("id")));
-            contact.setLookUpKey(cursor.getString(cursor.getColumnIndex("lookUpKey")));
             contact.setDisplayName(cursor.getString(cursor.getColumnIndex("name")));
             contact.setPhoneNum(cursor.getString(cursor.getColumnIndex("number")));
-            contact.setPhotoId(cursor.getLong(cursor.getColumnIndex("photoId")));
+            contact.setPhotoPath(cursor.getString(cursor.getColumnIndex("photoPath")));
+            contact.setEmail(cursor.getString(cursor.getColumnIndex("email")));
             contacts.add(contact);
         }
         cursor.close();
+        dbHelper.close();
         return contacts;
     }
 
@@ -150,6 +150,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
             callLogs.add(callLog);
         }
         cursor.close();
+        dbHelper.close();
         return callLogs;
     }
 
@@ -165,6 +166,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
             messages.add(message);
         }
         cursor.close();
+        dbHelper.close();
         return messages;
     }
 

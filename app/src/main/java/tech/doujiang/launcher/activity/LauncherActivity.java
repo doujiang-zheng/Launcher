@@ -99,7 +99,7 @@ public class LauncherActivity extends Activity  implements OnClickListener {
                 break;
             case R.id.add_contact:
                 intent = new Intent(this, AddContactActivity.class);
-                Log.e("ADD_CONTACT", "add contact");
+//                Log.e("ADD_CONTACT", "add contact");
                 break;
             default:
                 break;

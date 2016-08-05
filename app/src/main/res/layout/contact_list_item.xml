@@ -12,15 +12,11 @@
         android:textColor="@color/black"
         android:visibility="gone" />
 
-    <QuickContactBadge
-        android:id="@+id/qcb"
-        android:layout_width="75dip"
-        android:layout_height="75dip"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/alpha"
-        android:layout_marginBottom="3dip"
-        android:layout_marginTop="3dip"
-        />
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="50dp"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="5dp"/>
 
     <TextView
         android:id="@+id/name"
@@ -28,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5.0dip"
-        android:layout_toRightOf="@+id/qcb"
+        android:layout_toRightOf="@+id/photo"
         android:singleLine="true"
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="@color/black" />
@@ -39,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="5.0dip"
-        android:layout_toRightOf="@+id/qcb"
+        android:layout_toRightOf="@+id/photo"
         android:singleLine="true"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/black"/>
