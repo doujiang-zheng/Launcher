@@ -182,24 +182,26 @@ public class AddContactActivity extends AppCompatActivity implements OnClickList
         contact.setPhoneNum(contactNum.getText().toString());
 
         String name = contactName.getText().toString();
-        String pinYin = "";
+        StringBuilder sb = new StringBuilder();
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
         format.setCaseType(HanyuPinyinCaseType.UPPERCASE);
-        format.setToneType(HanyuPinyinToneType.WITH_TONE_NUMBER);
+        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         for (int i = 0; i < name.length(); i ++) {
             char c = name.charAt(i);
-            if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
-                pinYin += c;
-                continue;
-            }
-            String[] vals = new String[0];
+            String[] vals = null;
             try {
                 vals = PinyinHelper.toHanyuPinyinStringArray(c, format);
-                pinYin += vals.toString();
             } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
                 badHanyuPinyinOutputFormatCombination.printStackTrace();
             }
+
+            if (vals == null) {
+                sb.append(name.charAt(i));
+            } else {
+                sb.append(vals[0]);
+            }
         }
+        String pinYin = sb.toString().toUpperCase();
         contact.setPinYin(pinYin);
         dbHelper.addContact(contact);
         AddContactActivity.this.finish();

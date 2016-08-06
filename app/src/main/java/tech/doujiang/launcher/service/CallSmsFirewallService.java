@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.app.IntentService;
 import android.content.Intent;
@@ -16,6 +18,8 @@ import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import com.android.internal.telephony.ITelephony;
+
+import tech.doujiang.launcher.R;
 
 /*
 * 分为两种工作情况：
@@ -56,6 +60,20 @@ public class CallSmsFirewallService extends IntentService {
         listener = new PhoneListener();
         tm.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
         super.onCreate();
+
+        Thread endCall = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+        endCall.start();
+
+//        Notification notification = new Notification(R.drawable.icon,getText(R.string.ticker_text), System.currentTimeMillis());
+//        Intent notificationIntent = new Intent(this, ExampleActivity.class);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+//        notification.setLatestEventInfo(this, getText(R.string.notification_title), getText(R.string.notification_message), pendingIntent);
+//        startForeground(ONGOING_NOTIFICATION_ID, notification);
     }
 
     @Override

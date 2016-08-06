@@ -1,12 +1,16 @@
 package tech.doujiang.launcher.activity;
 
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,6 +28,7 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
 
     private TextView text_contact;
     private TextView text_call_log;
+    private ImageButton btn_add_contact;
 
     private Fragment callLogFragment;
     private Fragment contactFragment;
@@ -45,6 +50,9 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
                 text_contact.setTextColor(0xff1B940A);
                 initFragment(1);
                 break;
+            case R.id.btn_add_contact:
+                Intent intent = new Intent(this, AddContactActivity.class);
+                startActivity(intent);
             default:
                 break;
         }
@@ -63,6 +71,11 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
         initView();
         initEvent();
         initFragment(1);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void initFragment(int index) {
@@ -105,6 +118,7 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
     private void initEvent() {
         phone_call_log.setOnClickListener(this);
         phone_contact.setOnClickListener(this);
+        btn_add_contact.setOnClickListener(this);
     }
 
     private void initView() {
@@ -113,6 +127,10 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
 
         this.text_call_log = (TextView) findViewById(R.id.text_call_log);
         this.text_contact = (TextView) findViewById(R.id.text_contact);
+        text_call_log.setTextColor(Color.GRAY);
+        text_contact.setTextColor(0xff1B940A);
+
+        btn_add_contact = (ImageButton) findViewById(R.id.btn_add_contact);
     }
 
 }

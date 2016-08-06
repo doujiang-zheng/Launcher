@@ -29,22 +29,17 @@
         <service
             android:name=".service.CallSmsFirewallService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity android:name=".activity.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.categort.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ContactListActivity"
-            android:launchMode="singleTop">
-
-        </activity>
-
-        <activity android:name=".activity.CallLogListActivity" />
         <activity android:name=".activity.MessageBoxList" />
         <activity android:name=".activity.SMSListActivity" />
 
@@ -122,8 +117,10 @@
         </service>
 
         <activity android:name=".activity.AddContactActivity" />
-        <activity android:name=".activity.PhoneAppActivity" />
-        <activity android:name=".activity.SmsAppActivity"></activity>
+        <activity
+            android:name=".activity.PhoneAppActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activity.ContactDetailActivity"></activity>
     </application>
 
 </manifest>

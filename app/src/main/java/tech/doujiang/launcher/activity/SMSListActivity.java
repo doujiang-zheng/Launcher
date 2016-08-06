@@ -1,5 +1,7 @@
 package tech.doujiang.launcher.activity;
 
+import android.Manifest;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import tech.doujiang.launcher.R.id;
 import tech.doujiang.launcher.R.layout;
 
 public class SMSListActivity extends AppCompatActivity {
+    private static final int PERMISSIONS_REQUEST_READ_SMS = 100;
 
     private ListView smsListView;
     private SMSAdapter smsAdapter;
@@ -33,6 +36,9 @@ public class SMSListActivity extends AppCompatActivity {
         setContentView(R.layout.sms_list_view);
         smsListView = (ListView) findViewById(R.id.sms_list);
         smsAdapter = new SMSAdapter(SMSListActivity.this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_SMS);
+        }
         rsms = new RexseeSMS(SMSListActivity.this);
         List<SMSBean> list_mmt = rsms.getThreadsNum(rsms.getThreads(0));
         smsAdapter.assignment(list_mmt);

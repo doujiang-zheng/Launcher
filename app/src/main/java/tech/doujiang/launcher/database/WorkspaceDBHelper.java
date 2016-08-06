@@ -95,6 +95,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+        db.close();
     }
 
     public void addCallLog(CallLogBean callLog) {
@@ -107,6 +108,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+        db.close();
     }
 
     public void addMessage(MessageBean message) {
@@ -119,11 +121,12 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+        db.close();
     }
 
-    public ArrayList<ContactBean> getContact(WorkspaceDBHelper dbHelper) {
+    public ArrayList<ContactBean> getContact() {
         ArrayList<ContactBean> contacts = new ArrayList<ContactBean>();
-        Cursor cursor = dbHelper.getWritableDatabase(key).rawQuery("select * from Contact", null);
+        Cursor cursor = this.getWritableDatabase(key).rawQuery("select * from Contact order by pinYin asc", null);
         while (cursor.moveToNext()) {
             ContactBean contact = new ContactBean();
             contact.setContactId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -131,16 +134,17 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
             contact.setPhoneNum(cursor.getString(cursor.getColumnIndex("number")));
             contact.setPhotoPath(cursor.getString(cursor.getColumnIndex("photoPath")));
             contact.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+            contact.setPinYin(cursor.getString(cursor.getColumnIndex("pinYin")));
             contacts.add(contact);
         }
         cursor.close();
-        dbHelper.close();
+        this.close();
         return contacts;
     }
 
-    public ArrayList<CallLogBean> getCallLog(WorkspaceDBHelper dbHelper) {
+    public ArrayList<CallLogBean> getCallLog() {
         ArrayList<CallLogBean> callLogs = new ArrayList<CallLogBean>();
-        Cursor cursor = dbHelper.getWritableDatabase(key).rawQuery("select * from CallLog", null);
+        Cursor cursor = this.getWritableDatabase(key).rawQuery("select * from CallLog", null);
         while (cursor.moveToNext()) {
             CallLogBean callLog = new CallLogBean();
             callLog.setId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -150,13 +154,13 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
             callLogs.add(callLog);
         }
         cursor.close();
-        dbHelper.close();
+        this.close();
         return callLogs;
     }
 
-    public ArrayList<MessageBean> getMessage(WorkspaceDBHelper dbHelper) {
+    public ArrayList<MessageBean> getMessage() {
         ArrayList<MessageBean> messages = new ArrayList<MessageBean>();
-        Cursor cursor = dbHelper.getWritableDatabase(key).rawQuery("select * from Message", null);
+        Cursor cursor = this.getWritableDatabase(key).rawQuery("select * from Message", null);
         while (cursor.moveToNext()) {
             MessageBean message = new MessageBean();
             message.setId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -166,8 +170,21 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
             messages.add(message);
         }
         cursor.close();
-        dbHelper.close();
+        this.close();
         return messages;
     }
 
+    public void deleteContact(String number) {
+        SQLiteDatabase db = this.getWritableDatabase(key);
+        db.beginTransaction();
+        try {
+//            Log.e("id: ", Integer.toString(contactId));
+//            db.execSQL("DELETE FROM Contact where id = ?", new String[]{Integer.toString(contactId)});
+            db.execSQL("DELETE FROM Contact WHERE number = ?", new Object[]{number});
+            Log.e("num: ", number);
+        } finally {
+            db.endTransaction();
+        }
+        db.close();
+    }
 }

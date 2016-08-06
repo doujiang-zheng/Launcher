@@ -30,7 +30,6 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="top|right|center"
         android:layout_marginTop="0dip"
-        android:background="@null"
         android:scaleType="centerInside"
         />
 

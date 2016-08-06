@@ -1,22 +1,21 @@
 package tech.doujiang.launcher.fragment;
 
 import android.Manifest;
-import android.content.AsyncQueryHandler;
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.List;
-import java.util.Map;
 
 import tech.doujiang.launcher.R;
-import tech.doujiang.launcher.activity.ContactListActivity;
+import tech.doujiang.launcher.activity.ContactDetailActivity;
 import tech.doujiang.launcher.adapter.ContactListAdapter;
 import tech.doujiang.launcher.database.WorkspaceDBHelper;
 import tech.doujiang.launcher.model.ContactBean;
@@ -26,15 +25,13 @@ public class ContactListFragment extends Fragment {
 
     private static final int PERMISSIONS_REQUEST_READ_CONTACT = 100;
 
+    private View view;
     private ContactListAdapter adapter;
     private ListView contactListView;
-    private List<ContactBean> contactList;
     private WorkspaceDBHelper dbHelper;
     private QuickAlphabeticBar alphabeticBar;
 
-    private Map<Integer, ContactBean> contactIdMap = null;
-
-//    private OnFragmentInteractionListener mListener;
+    public static List<ContactBean> contactList;
 
     public ContactListFragment() {
     }
@@ -52,8 +49,17 @@ public class ContactListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_contact_list, container, false);
+        view = inflater.inflate(R.layout.fragment_contact_list, container, false);
         contactListView = (ListView) view.findViewById(R.id.contact_list);
+        contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
+                intent.putExtra("position", position);
+                startActivity(intent);
+            }
+        });
+
         alphabeticBar = (QuickAlphabeticBar) view.findViewById(R.id.fast_scroller);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACT);
@@ -62,10 +68,18 @@ public class ContactListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        contactList = dbHelper.getContact();
+        if (contactList.size() > 0) {
+            setAdapter(contactList);
+        }
+    }
+
     private void init() {
         dbHelper = WorkspaceDBHelper.getDBHelper(getActivity());
-        contactList = dbHelper.getContact(dbHelper);
-        dbHelper.close();
+        contactList = dbHelper.getContact();
         if (contactList.size() > 0) {
             setAdapter(contactList);
         }
@@ -74,36 +88,10 @@ public class ContactListFragment extends Fragment {
     private void setAdapter(List<ContactBean> contactList) {
         adapter = new ContactListAdapter(getActivity(), contactList, alphabeticBar);
         contactListView.setAdapter(adapter);
-        alphabeticBar.init(getActivity());
+        alphabeticBar.init(view);
         alphabeticBar.setListView(contactListView);
         alphabeticBar.setHeight(alphabeticBar.getHeight());
         alphabeticBar.setVisibility(View.VISIBLE);
     }
 
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-//        mListener = null;
-    }
-    // No need to inetract between fragments.
-//    public interface OnFragmentInteractionListener {
-//        void onFragmentInteraction(Uri uri);
-//    }
 }

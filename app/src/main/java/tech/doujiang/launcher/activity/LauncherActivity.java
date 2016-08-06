@@ -92,7 +92,7 @@ public class LauncherActivity extends Activity  implements OnClickListener {
                 intent = new Intent(this, PhoneAppActivity.class);
                 break;
             case R.id.message_app:
-                intent = new Intent(this, SmsAppActivity.class);
+                intent = new Intent(this, SMSListActivity.class);
                 break;
             case R.id.db_test:
                 dbHelper = WorkspaceDBHelper.getDBHelper(getApplicationContext());

@@ -28,9 +28,8 @@ public class CallLogListFragment extends Fragment {
     private ListView callLogListView;
     private WorkspaceDBHelper dbHelper;
     private DialAdapter adapter;
-    private List<CallLogBean> callLogs;
 
-//    private OnFragmentInteractionListener mListener;
+    public List<CallLogBean> callLogs;
 
     public CallLogListFragment() {
 
@@ -58,9 +57,18 @@ public class CallLogListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        callLogs = dbHelper.getCallLog();
+        if (callLogs.size() > 0) {
+            setAdapter(callLogs);
+        }
+    }
+
     private void init() {
         dbHelper = WorkspaceDBHelper.getDBHelper(getActivity());
-        callLogs = dbHelper.getCallLog(dbHelper);
+        callLogs = dbHelper.getCallLog();
         dbHelper.close();
         if (callLogs.size() > 0) {
             setAdapter(callLogs);
@@ -72,30 +80,4 @@ public class CallLogListFragment extends Fragment {
         callLogListView.setAdapter(adapter);
     }
 
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-//        mListener = null;
-    }
-    // No need to interact between fragments.
-//    public interface OnFragmentInteractionListener {
-//        void onFragmentInteraction(Uri uri);
-//    }
 }

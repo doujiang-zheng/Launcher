@@ -38,7 +38,7 @@ public class QuickAlphabeticBar extends ImageButton{
     }
 
 
-    public void init(Activity ctx) {
+    public void init(View ctx) {
         mDialogText = (TextView) ctx.findViewById(R.id.fast_position);
         mDialogText.setVisibility(View.INVISIBLE);
         mHandler = new Handler();
@@ -48,7 +48,7 @@ public class QuickAlphabeticBar extends ImageButton{
         this.mList = mList;
     }
 
-    public void setAlphaIndexer(HashMap<String, Integer> alphaInteger) {
+    public void setAlphaIndexer(HashMap<String, Integer> alphaIndexer) {
         this.alphaIndexer = alphaIndexer;
     }
 
@@ -138,7 +138,7 @@ public class QuickAlphabeticBar extends ImageButton{
         int width = getWidth();
         int singleHeight = height / letters.length;
         for (int i = 0; i < letters.length; i ++) {
-            paint.setColor(Color.WHITE);
+            paint.setColor(Color.GRAY);
             paint.setTextSize(20);
             paint.setTypeface(Typeface.DEFAULT_BOLD);
             paint.setAntiAlias(true);

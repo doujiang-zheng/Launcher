@@ -9,6 +9,7 @@ import android.content.*;
 import android.graphics.*;
 import android.net.Uri;
 import android.provider.*;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import tech.doujiang.launcher.model.*;

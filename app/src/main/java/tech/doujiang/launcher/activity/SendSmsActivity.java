@@ -20,10 +20,10 @@ public class SendSmsActivity extends AppCompatActivity {
         // 1. 查询当前默认的短信应用包名
         // 2. 请求用户将本应用设置成默认短信应用
         // 3. 还原第一步的设置
-        String defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(this.getApplicationContext());
-        Intent intent = new Intent(this.getApplicationContext(), SendSmsActivity.class);
-        intent.putExtra(Sms.Intents.EXTRA_PACKAGE_NAME, this.getApplicationContext().getPackageName());
-        startActivity(intent);
+//        String defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(this.getApplicationContext());
+//        Intent intent = new Intent(this.getApplicationContext(), SendSmsActivity.class);
+//        intent.putExtra(Sms.Intents.EXTRA_PACKAGE_NAME, this.getApplicationContext().getPackageName());
+//        startActivity(intent);
         // 还原,尚有问题
 //        Intent intent = new Intent(context, Sms.Intents.ACTION_CHANGE_DEFAULT);
 //        intent.putExtra(Sms.Intents.EXTRA_PACKAGE_NAME, defaultSmsApp);

@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="tech.doujiang.launcher.activity.PhoneAppActivity">
 
-    <SearchView
-        android:layout_marginTop="5dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:iconifiedByDefault="false"
-        android:queryHint="输入姓名或电话号码">
-    </SearchView>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <SearchView
+            android:id="@+id/search"
+            android:layout_width="270dp"
+            android:layout_height="50dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="输入姓名或电话号码">
+        </SearchView>
+
+       <ImageButton
+           android:id="@+id/btn_add_contact"
+           android:layout_width="50dp"
+           android:layout_height="50dp"
+           android:src="@drawable/add_contact"
+           android:scaleType="centerInside"/>
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/phone_content"
@@ -27,4 +42,4 @@
 
     <include layout="@layout/phone_bottom"/>
 
-</RelativeLayout>
+</LinearLayout>
