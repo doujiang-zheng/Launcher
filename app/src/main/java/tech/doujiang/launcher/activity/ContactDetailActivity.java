@@ -53,8 +53,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         deleteContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("name:", contact.getDisplayName());
-                dbHelper.deleteContact(contact.getPhoneNum());
+                dbHelper.deleteContact(contact.getContactId());
                 finish();
             }
         });

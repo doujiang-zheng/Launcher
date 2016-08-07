@@ -1,5 +1,7 @@
 package tech.doujiang.launcher.activity;
 
+import android.Manifest;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import java.util.*;
@@ -29,35 +31,9 @@ public class LauncherActivity extends Activity  implements OnClickListener {
     private List<String> forbiddenPackage;
     private WorkspaceDBHelper dbHelper;
     GridView mGrid;
-    Button phone, message, db_interact, add_contact;
 
-//    private OnItemClickListener listener = new OnItemClickListener() {
-//
-//        @Override
-//        public void onItemClick(AdapterView<?> parent, View view, int position,
-//                                long id) {
-//            ResolveInfo info = mApps.get(position);
-//            //Leave to be realized later.
-//            String pkg = info.activityInfo.packageName;
-//            if (!forbiddenPackage.contains(pkg)) {
-//
-//                String cls = info.activityInfo.name;
-//
-//                ComponentName component = new ComponentName(pkg, cls);
-//
-//                Intent i = new Intent();
-//                i.setComponent(component);
-//                startActivity(i);
-//            } else {
-//                new AlertDialog.Builder(LauncherActivity.this)
-//                        .setIcon(R.drawable.touxiang)
-//                        .setTitle(R.string.app_name)
-//                        .setMessage(R.string.forbidden)
-//                        .show();
-//                Log.e("ForbiddenList", "This app has been forbidden!");
-//            }
-//        }
-//    };
+    private int PRIORITY = 100;
+    Button phone, message, db_interact, add_contact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +42,17 @@ public class LauncherActivity extends Activity  implements OnClickListener {
         loadApps();
         setContentView(R.layout.activity_launcher);
         getForbiddenPackage();
-//        mGrid = (GridView) findViewById(R.id.apps_list);
-//        mGrid.setAdapter(new AppsAdapter());
-//        mGrid.setOnItemClickListener(listener);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PRIORITY);
+            requestPermissions(new String[]{Manifest.permission.READ_CALL_LOG}, PRIORITY);
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PRIORITY);
+            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PRIORITY);
+            requestPermissions(new String[]{Manifest.permission.READ_SMS}, PRIORITY);
+            requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS}, PRIORITY);
+            requestPermissions(new String[]{Manifest.permission.WRITE_CALL_LOG}, PRIORITY);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PRIORITY);
+        }
 
         phone = (Button) findViewById(R.id.phone_app);
         message = (Button) findViewById(R.id.message_app);
@@ -79,33 +63,30 @@ public class LauncherActivity extends Activity  implements OnClickListener {
         message.setOnClickListener(this);
         db_interact.setOnClickListener(this);
         add_contact.setOnClickListener(this);
+
         Intent intent = new Intent(this, CallSmsFirewallService.class);
         startService(intent);
     }
 
     @Override
     public void onClick(View view) {
-//        Toast.makeText(this, "Warning: 15366106759 Not in the List!", Toast.LENGTH_LONG).show();
         Intent intent = null;
         switch (view.getId()) {
             case R.id.phone_app:
                 intent = new Intent(this, PhoneAppActivity.class);
+                startActivity(intent);
                 break;
             case R.id.message_app:
                 intent = new Intent(this, SMSListActivity.class);
-                break;
-            case R.id.db_test:
-                dbHelper = WorkspaceDBHelper.getDBHelper(getApplicationContext());
+                startActivity(intent);
                 break;
             case R.id.add_contact:
                 intent = new Intent(this, AddContactActivity.class);
-//                Log.e("ADD_CONTACT", "add contact");
+                startActivity(intent);
                 break;
             default:
                 break;
         }
-        if (intent != null)
-            startActivity(intent);
     }
 
 
@@ -125,43 +106,4 @@ public class LauncherActivity extends Activity  implements OnClickListener {
         mApps.clear();
     }
 
-//    public class AppsAdapter extends BaseAdapter {
-//        public AppsAdapter() {
-//
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return mApps.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int position) {
-//            return mApps.get(position);
-//        }
-//
-//        @Override
-//        public long getItemId(int position) {
-//            return position;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            ImageView i;
-//
-//            if (convertView == null) {
-//                i = new ImageView(LauncherActivity.this);
-//                i.setScaleType(ImageView.ScaleType.FIT_CENTER);
-//                i.setLayoutParams(new GridView.LayoutParams(100,100));
-//            } else {
-//                i = (ImageView) convertView;
-//            }
-//
-//            ResolveInfo info = mApps.get(position);
-//            i.setImageDrawable(info.activityInfo.loadIcon(getPackageManager()));
-//
-//            return i;
-//        }
-//
-//    }
 }

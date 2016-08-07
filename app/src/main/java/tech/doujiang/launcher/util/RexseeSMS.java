@@ -21,7 +21,6 @@ public class RexseeSMS {
 
     public RexseeSMS(Context mContext) {
         this.mContext = mContext;
-        // TODO Auto-generated constructor stub
     }
 
     public static String[] SMS_COLUMNS = new String[] { "_id", // 0
@@ -148,7 +147,6 @@ public class RexseeSMS {
         Cursor cursor = null;
         ContentResolver contentResolver = mContext.getContentResolver();
         List<SMSBean> list = new ArrayList<SMSBean>();
-        // try {
         for (SMSBean mmt : ll) {
             cursor = contentResolver.query(Uri.parse(CONTENT_URI_SMS),
                     SMS_COLUMNS, "thread_id = " + mmt.getThread_id(), null,
@@ -163,9 +161,5 @@ public class RexseeSMS {
         }
 
         return list;
-        // } catch (Exception e) {
-        // Log.e("getThreadsNum", "getThreadsNum-------------");
-        // return list;
-        // }
     }
 }

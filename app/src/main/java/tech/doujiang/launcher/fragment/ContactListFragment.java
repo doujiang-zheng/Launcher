@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -72,9 +73,12 @@ public class ContactListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         contactList = dbHelper.getContact();
-        if (contactList.size() > 0) {
+//        if (contactList.size() > 0) {
             setAdapter(contactList);
-        }
+//        } else {
+            // Here contactlist should be cleared.
+//            Toast.makeText(getContext(), "none", Toast.LENGTH_SHORT);
+//        }
     }
 
     private void init() {

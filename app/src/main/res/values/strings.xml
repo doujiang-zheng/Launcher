@@ -23,4 +23,5 @@
     <string name="warn_invalid_email">邮箱不合法!</string>
     <string name="send_msg">发送短信</string>
     <string name="delete_contact">删除联系人</string>
+    <string name="search_contact_hint">输入姓名或电话号码</string>
 </resources>

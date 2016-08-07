@@ -127,6 +127,7 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
     public ArrayList<ContactBean> getContact() {
         ArrayList<ContactBean> contacts = new ArrayList<ContactBean>();
         Cursor cursor = this.getWritableDatabase(key).rawQuery("select * from Contact order by pinYin asc", null);
+//        Cursor cursor = this.getWritableDatabase(key).rawQuery("select * from Contact where id = ?", new String[]{"5"});
         while (cursor.moveToNext()) {
             ContactBean contact = new ContactBean();
             contact.setContactId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -174,17 +175,13 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         return messages;
     }
 
-    public void deleteContact(String number) {
+    public void deleteContact(int contactId) {
         SQLiteDatabase db = this.getWritableDatabase(key);
-        db.beginTransaction();
         try {
-//            Log.e("id: ", Integer.toString(contactId));
-//            db.execSQL("DELETE FROM Contact where id = ?", new String[]{Integer.toString(contactId)});
-            db.execSQL("DELETE FROM Contact WHERE number = ?", new Object[]{number});
-            Log.e("num: ", number);
+            db.execSQL("DELETE FROM Contact where id = ?", new String[]{Integer.toString(contactId)});
         } finally {
-            db.endTransaction();
         }
         db.close();
+
     }
 }

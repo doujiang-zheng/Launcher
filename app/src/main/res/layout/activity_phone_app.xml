@@ -16,11 +16,11 @@
         android:orientation="horizontal">
 
         <SearchView
-            android:id="@+id/search"
+            android:id="@+id/search_contact"
             android:layout_width="270dp"
             android:layout_height="50dp"
             android:iconifiedByDefault="false"
-            android:queryHint="输入姓名或电话号码">
+            android:queryHint="@string/search_contact_hint">
         </SearchView>
 
        <ImageButton
