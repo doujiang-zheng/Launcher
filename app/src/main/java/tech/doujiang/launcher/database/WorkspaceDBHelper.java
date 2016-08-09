@@ -199,6 +199,16 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         return sms;
     }
 
+    public long getMaxDate() {
+        Cursor cursor = this.getWritableDatabase(key).rawQuery("select max(date) as date from Message", null);
+        while (cursor.moveToNext()) {
+            return cursor.getLong(cursor.getColumnIndex("date"));
+        }
+        cursor.close();
+        this.close();
+        return 0;
+    }
+
     public ArrayList<MessageBean> getMessage(String id) {
         ArrayList<MessageBean> messages = new ArrayList<MessageBean>();
         Cursor cursor = this.getWritableDatabase(key).rawQuery(

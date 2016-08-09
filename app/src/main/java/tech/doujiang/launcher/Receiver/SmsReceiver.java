@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -24,6 +26,7 @@ public class SmsReceiver extends BroadcastReceiver {
     private ArrayList<ContactBean> contactList;
     private Constant constant;
     private ArrayList<String> numbers;
+    private String defaultSmsApp;
 
     public SmsReceiver() {
     }
@@ -33,28 +36,25 @@ public class SmsReceiver extends BroadcastReceiver {
         if (dbHelper == null) {
             dbHelper = WorkspaceDBHelper.getDBHelper(context);
         }
-
+        Log.e("DefaultSmsApp: ", Telephony.Sms.getDefaultSmsPackage(context));
         Object [] pdus= (Object[]) intent.getExtras().get("pdus");
         for(Object pdu:pdus) {
             SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdu);
             String sender = smsMessage.getDisplayOriginatingAddress();
             String content = smsMessage.getMessageBody();
-//            long date = smsMessage.getTimestampMillis();
             long date = System.currentTimeMillis();
             Date timeDate = new Date(date);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = simpleDateFormat.format(timeDate);
 
+            Long maxDate = dbHelper.getMaxDate();
             numbers = dbHelper.getNumber();
             constant = new Constant();
-            if (constant.run(context)) {
-                if (numbers.contains(sender)) {
+            if (numbers.contains(sender) && smsMessage.getTimestampMillis() < maxDate) {
                     MessageBean message = new MessageBean();
                     message.setType(constant.LAYOUT_INCOMING);
                     message.setText(content);
                     message.setDate(smsMessage.getTimestampMillis());
-                    Log.e("text: ", content);
-                    Log.e("date: ", Long.toString(smsMessage.getTimestampMillis()));
                     contactList = dbHelper.getContact();
                     for (ContactBean contact : contactList) {
                         if (contact.getPhoneNum().equals(sender)) {
@@ -63,12 +63,28 @@ public class SmsReceiver extends BroadcastReceiver {
                         }
                     }
                     dbHelper.addMessage(message);
-                } else {
-                    abortBroadcast();
-                }
-            } else {
-                if (numbers.contains(sender)) {
 
+                Log.e("MessageId: ", Integer.toString(message.getId()));
+                Log.e("MessageDate: ", Long.toString(message.getDate()));
+                Log.e("MessageText: ", message.getText());
+                Log.e("MessageType: ", Integer.toString(message.getType()));
+
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                    defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(context);
+                    Intent smsIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                    smsIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.getPackageName());
+                    smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(smsIntent);
+                }
+                abortBroadcast();
+                Uri deleteUri = Uri.parse("content://sms");
+                context.getContentResolver().delete(deleteUri, "address=" + sender, null);
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                    Log.e("Refresh: ", defaultSmsApp);
+                    Intent smsIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                    smsIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, defaultSmsApp);
+                    smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(smsIntent);
                 }
             }
 
@@ -77,34 +93,7 @@ public class SmsReceiver extends BroadcastReceiver {
             Log.e("短信时间:", time);
 
             Log.e("deleteSMS: ", sender);
-            if (!SmsWriteOpUtil.isWriteEnabled(context)) {
-                SmsWriteOpUtil.setWriteEnabled(context, true);
-            }
-            Uri deleteUri = Uri.parse("content://sms");
-            context.getContentResolver().delete(deleteUri, "address=" + sender, null);
-            deleteSMS(context, sender);
         }
-    }
-
-    public void deleteSMS(Context context, String incomingNUmber) {
-//        try {
-//            ContentResolver CR = context.getContentResolver();
-//            // Query SMS
-//            Uri uriSms = Uri.parse("content://sms/sent");
-//            Cursor c = CR.query(uriSms,
-//                    new String[] { "_id", "thread_id" }, null, null, null);
-//            if (null != c && c.moveToFirst()) {
-//                do {
-//                    // Delete SMS
-//                    long threadId = c.getLong(1);
-//                    CR.delete(Uri.parse("content://sms/conversations/" + threadId),
-//                            null, null);
-//                    Log.d("deleteSMS", "threadId:: "+threadId);
-//                } while (c.moveToNext());
-//            }
-//        } catch (Exception e) {
-//            Log.d("deleteSMS", "Exception:: " + e);
-//        }
     }
 
 }

@@ -28,7 +28,6 @@ import tech.doujiang.launcher.R.id;
 public class SMSListActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_READ_SMS = 100;
 
-    private ImageButton wrtieMsg;
     private ListView smsListView;
     private List<SMSBean> smsList;
     private WorkspaceDBHelper dbHelper;
@@ -38,14 +37,6 @@ public class SMSListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sms_list_view);
-//        wrtieMsg = (ImageButton) findViewById(id.btn_new_msg);
-//        wrtieMsg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(SMSListActivity.this, SendSmsActivity.class);
-//                startActivity(intent);
-//            }
-//        });
         smsListView = (ListView) findViewById(R.id.sms_list);
         smsAdapter = new SMSAdapter(SMSListActivity.this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

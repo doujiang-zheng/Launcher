@@ -8,7 +8,7 @@ import android.util.Log;
 import tech.doujiang.launcher.R;
 
 public class MmsReceiver extends BroadcastReceiver {
-    public static final String TAG = "DOUJIANG";
+    public static final String TAG = "MmsReceiver";
 
     public MmsReceiver() {
     }

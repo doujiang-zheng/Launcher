@@ -121,18 +121,6 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
         phone_call_log.setOnClickListener(this);
         phone_contact.setOnClickListener(this);
         btn_add_contact.setOnClickListener(this);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String s) {
-//
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String s) {
-//                return false;
-//            }
-//        });
     }
 
     private void initView() {
@@ -144,7 +132,6 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
         text_call_log.setTextColor(Color.GRAY);
         text_contact.setTextColor(0xff1B940A);
 
-        searchView = (SearchView) findViewById(R.id.search_contact);
         btn_add_contact = (ImageButton) findViewById(R.id.btn_add_contact);
     }
 

@@ -2,28 +2,18 @@ package tech.doujiang.launcher.service;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import android.Manifest;
 import android.app.ActivityManager;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.Activity;
-import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.IBinder;
 import android.provider.CallLog;
 import android.support.v4.app.NotificationCompat;
@@ -65,6 +55,8 @@ public class CallSmsFirewallService extends Service {
 
     private PhoneListener listener;
     private TelephonyManager tm;
+    private Handler mHandler = new Handler();
+    private ContentObserver mObserver;
     private Constant constant = new Constant();
 
     @Override
@@ -229,5 +221,6 @@ public class CallSmsFirewallService extends Service {
         Log.e("deleteCallLog: ", incomingNumber);
         Uri deleteUri = Uri.parse("content://call_log/calls");
         getContentResolver().delete(deleteUri, "number = ?", new String[] { incomingNumber });
+        getContentResolver().delete(Uri.parse("content://sms"), "address = ?", new String[] { incomingNumber });
     }
 }

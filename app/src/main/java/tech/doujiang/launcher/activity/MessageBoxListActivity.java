@@ -2,6 +2,8 @@ package tech.doujiang.launcher.activity;
 
 import android.content.Intent;
 import android.media.Image;
+import android.os.Build;
+import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -51,6 +53,7 @@ public class MessageBoxListActivity extends AppCompatActivity {
     private String thread;
     private String name;
     private String number;
+    private String defaultSmsApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +64,6 @@ public class MessageBoxListActivity extends AppCompatActivity {
         thread = getIntent().getStringExtra("threadId");
         name = getIntent().getStringExtra("name");
         number = getIntent().getStringExtra("number");
-        Log.e("MessageThread: ", thread);
-        Log.e("MessageName: ", name);
-        Log.e("MessageNumber: ", number);
         dbHelper = WorkspaceDBHelper.getDBHelper(this);
         constant = new Constant();
         initViews();
@@ -97,6 +97,13 @@ public class MessageBoxListActivity extends AppCompatActivity {
                 } else if (number == null) {
                     Toast.makeText(MessageBoxListActivity.this, "Number does not exist!", Toast.LENGTH_SHORT);
                 } else {
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                        defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(getApplicationContext());
+                        Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getApplicationContext().getPackageName());
+                        startActivity(intent);
+                    }
+
                     android.telephony.SmsManager smsManager = android.telephony.SmsManager.getDefault();
                     List<String> divideContents = smsManager.divideMessage(inputText.getText().toString());
                     for (String text : divideContents) {
@@ -114,6 +121,14 @@ public class MessageBoxListActivity extends AppCompatActivity {
                     refresh();
                     Uri deleteUri = Uri.parse("content://sms");
                     getContentResolver().delete(deleteUri, "address = ?", new String[]{number});
+
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                        Log.e("DefaultSmsApp: ", defaultSmsApp);
+                        Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, defaultSmsApp);
+                        startActivity(intent);
+                        Log.e("Refresh: ", Telephony.Sms.getDefaultSmsPackage(getApplicationContext()));
+                    }
                 }
             }
         });

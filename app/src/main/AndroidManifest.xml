@@ -33,12 +33,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="IvtLyoPAFqGcFA9flvLGj1Z1QKxfAeoe" />       //key:开发者申请的key
-
-
+            android:value="IvtLyoPAFqGcFA9flvLGj1Z1QKxfAeoe" />
+        //key:开发者申请的key
         <service
             android:name=".service.CallSmsFirewallService"
             android:enabled="true"
@@ -46,8 +44,9 @@
 
         <activity android:name=".activity.LauncherActivity">
             <intent-filter>
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+
+                <!-- <action android:name="android.intent.action.MAIN" /> -->
+                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -79,7 +78,7 @@
             android:name=".Receiver.SmsReceiver"
             android:enabled="true"
             android:exported="true"
-            android:permission="android.permission.BROADCAST_WAP_PUSH">
+            android:permission="android.permission.BROADCAST_SMS">
             <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -89,7 +88,8 @@
         <receiver
             android:name=".Receiver.MmsReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_WAP_PUSH">
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
 
@@ -97,20 +97,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.SendSmsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <action android:name="android.intent.action.SENDTO" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="sms" />
-                <data android:scheme="smsto" />
-                <data android:scheme="mms" />
-                <data android:scheme="mmsto" />
-            </intent-filter>
-        </activity>
         <activity android:name=".activity.AddContactActivity" />
         <activity
             android:name=".activity.PhoneAppActivity"
@@ -119,6 +105,7 @@
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -135,7 +122,36 @@
         <service
             android:name=".service.RequestFileService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" />
+
+        <!-- Activity that allows the user to send new SMS/MMS messages -->
+        <activity android:name=".activity.ExampleActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SENDTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="sms" />
+                <data android:scheme="smsto" />
+                <data android:scheme="mms" />
+                <data android:scheme="mmsto" />
+            </intent-filter>
+        </activity>
+
+        <!-- Service that delivers messages from the phone "quick response" -->
+        <service android:name=".service.HeadlessSmsService"
+            android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.RESPOND_VIA_MESSAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="sms" />
+                <data android:scheme="smsto" />
+                <data android:scheme="mms" />
+                <data android:scheme="mmsto" />
+            </intent-filter>
         </service>
     </application>
 
