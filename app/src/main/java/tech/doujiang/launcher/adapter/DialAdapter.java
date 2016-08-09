@@ -1,5 +1,6 @@
 package tech.doujiang.launcher.adapter;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 //import org.apache.commons.beanutils.Converter;
@@ -54,8 +55,7 @@ public class DialAdapter extends BaseAdapter{
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.number = (TextView) convertView.findViewById(R.id.number);
             holder.time = (TextView) convertView.findViewById(R.id.time);
-            holder.call_btn = (TextView) convertView.findViewById(R.id.call_btn);
-            convertView.setTag(holder); // »º´æ
+            convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -79,9 +79,13 @@ public class DialAdapter extends BaseAdapter{
         }
         holder.name.setText(callLog.getName());
         holder.number.setText(callLog.getNumber());
-        holder.time.setText(callLog.getDate());
+        Date timeDate = new Date(callLog.getDate());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = simpleDateFormat.format(timeDate);
+        holder.time.setText(time);
 
-        addViewListener(holder.call_btn, callLog, position);
+        addViewListener(holder.name, callLog, position);
+        addViewListener(holder.number, callLog, position);
         return convertView;
     }
 

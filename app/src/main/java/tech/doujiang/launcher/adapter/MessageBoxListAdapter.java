@@ -1,5 +1,7 @@
 package tech.doujiang.launcher.adapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -56,8 +58,7 @@ public class MessageBoxListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
 
         MessageBean mb = mbList.get(position);
-        // µÃµ½²¼¾ÖID
-        int itemLayout = mb.getLayoutID();
+        int itemLayout = mb.getType();
         layout_father = new LinearLayout(ctx);
         vi.inflate(itemLayout, layout_father, true);
 
@@ -71,7 +72,10 @@ public class MessageBoxListAdapter extends BaseAdapter{
 
         tvDate = (TextView) layout_father
                 .findViewById(R.id.messagedetail_row_date);
-        tvDate.setText(mb.getDate());
+        Date timeDate = new Date(mb.getDate());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = simpleDateFormat.format(timeDate);
+        tvDate.setText(time);
 
         addListener(tvText, tvDate, layout_child, mb);
 
@@ -89,7 +93,7 @@ public class MessageBoxListAdapter extends BaseAdapter{
 
         layout_bj.setOnLongClickListener(new OnLongClickListener() {
             public boolean onLongClick(View v) {
-                tvText.setTextColor(0xffffffff);
+                tvText.setTextColor(Color.BLACK);
                 showListDialog(newtan, mb);
                 return true;
             }
@@ -102,7 +106,7 @@ public class MessageBoxListAdapter extends BaseAdapter{
                     case MotionEvent.ACTION_DOWN:
 
                     case MotionEvent.ACTION_MOVE:
-                        tvText.setTextColor(0xffffffff);
+                        tvText.setTextColor(Color.BLACK);
                         break;
 
                     default:
@@ -114,10 +118,10 @@ public class MessageBoxListAdapter extends BaseAdapter{
         });
     }
 
-    private String[] newtan = new String[] { "×ª·¢", "¸´ÖÆÎÄ±¾ÄÚÈÝ", "É¾³ý", "²éÑ¯ÐÅÏ¢ÏêÇé" };
+    private String[] newtan = new String[] { "", "", "", "" };
 
     private void showListDialog(final String[] arg, final MessageBean mb) {
-        new AlertDialog.Builder(ctx).setTitle("ÐÅÏ¢Ñ¡Ïî")
+        new AlertDialog.Builder(ctx).setTitle("")
                 .setItems(arg, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {

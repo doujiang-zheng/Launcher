@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import tech.doujiang.launcher.adapter.MessageBoxListAdapter;
+import tech.doujiang.launcher.database.WorkspaceDBHelper;
 import tech.doujiang.launcher.model.MessageBean;
 import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.R.layout;
@@ -30,8 +31,9 @@ import tech.doujiang.launcher.R.layout;
 public class MessageBoxList extends AppCompatActivity {
 
     private ListView talkView;
-    private List<MessageBean> messages = null;
-    private AsyncQueryHandler asyncQuery;
+    private List<MessageBean> messages;
+    private List<MessageBean> threadMsg;
+    private WorkspaceDBHelper dbHelper;
     private String address;
     private SimpleDateFormat sdf;
 
@@ -40,6 +42,7 @@ public class MessageBoxList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.msg_list_view);
         sdf = new SimpleDateFormat("MM-dd HH:mm");
+        messages = SMSListActivity.messageList;
         String thread = getIntent().getStringExtra("threadId");
         init(thread);
     }

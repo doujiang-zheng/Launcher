@@ -7,21 +7,12 @@ public class MessageBean {
 
     private int id;
     private String name;
-    private String date;
+    private Long date;
     private String text;
-    private int type;
-    private int layoutID;
+    private int type;   // 1 means incoming, 2 means outgoing
     private boolean is_read;
 
     public MessageBean() {
-    }
-
-    public MessageBean(String name, String date, String text, int layoutID) {
-        super();
-        this.name = name;
-        this.date = date;
-        this.text = text;
-        this.layoutID = layoutID;
     }
 
     public String getName() {
@@ -32,28 +23,12 @@ public class MessageBean {
         this.name = name;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getText() {
         return text;
     }
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public int getLayoutID() {
-        return layoutID;
-    }
-
-    public void setLayoutID(int layoutID) {
-        this.layoutID = layoutID;
     }
 
     public boolean isIs_read() {
@@ -78,5 +53,13 @@ public class MessageBean {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public Long getDate() {
+        return date;
+    }
+
+    public void setDate(Long date) {
+        this.date = date;
     }
 }

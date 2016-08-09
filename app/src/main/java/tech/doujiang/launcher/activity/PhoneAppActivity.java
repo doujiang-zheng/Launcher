@@ -121,18 +121,18 @@ public class PhoneAppActivity extends FragmentActivity implements View.OnClickLi
         phone_call_log.setOnClickListener(this);
         phone_contact.setOnClickListener(this);
         btn_add_contact.setOnClickListener(this);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//                return false;
+//            }
+//        });
     }
 
     private void initView() {

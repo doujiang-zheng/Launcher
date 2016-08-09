@@ -5,25 +5,14 @@ package tech.doujiang.launcher.model;
  */
 public class SMSBean {
 
-    private String thread_id;
-    private String msg_count;
+    private int thread_id;
+    private int msg_count;
     private String msg_snippet;
-    private String address;
+    private String number;
     private Long date;
     private String read;
 
-    public SMSBean(String threadId, String msgCount, String msgSnippet) {
-        thread_id = threadId;
-        msg_count = msgCount;
-        msg_snippet = msgSnippet;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public SMSBean() {
     }
 
     public Long getDate() {
@@ -42,22 +31,6 @@ public class SMSBean {
         this.read = read;
     }
 
-    public String getThread_id() {
-        return thread_id;
-    }
-
-    public void setThread_id(String threadId) {
-        thread_id = threadId;
-    }
-
-    public String getMsg_count() {
-        return msg_count;
-    }
-
-    public void setMsg_count(String msgCount) {
-        msg_count = msgCount;
-    }
-
     public String getMsg_snippet() {
         return msg_snippet;
     }
@@ -66,4 +39,27 @@ public class SMSBean {
         msg_snippet = msgSnippet;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public int getThread_id() {
+        return thread_id;
+    }
+
+    public void setThread_id(int thread_id) {
+        this.thread_id = thread_id;
+    }
+
+    public int getMsg_count() {
+        return msg_count;
+    }
+
+    public void setMsg_count(int msg_count) {
+        this.msg_count = msg_count;
+    }
 }

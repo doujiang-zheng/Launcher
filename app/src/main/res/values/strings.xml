@@ -24,4 +24,8 @@
     <string name="send_msg">发送短信</string>
     <string name="delete_contact">删除联系人</string>
     <string name="search_contact_hint">输入姓名或电话号码</string>
+    <string name="login">登录</string>
+    <string name="exit">退出</string>
+    <string name="empty_psw">密码不能为空</string>
+    <string name="empty_account">账户名不能为空</string>
 </resources>

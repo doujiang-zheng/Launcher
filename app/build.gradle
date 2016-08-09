@@ -1,13 +1,26 @@
 apply plugin: 'com.android.application'
 
 android {
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
     compileSdkVersion 24
     buildToolsVersion "23.0.2"
+
+    aaptOptions {
+        additionalParameters "--no-version-vectors"
+    }
 
     defaultConfig {
         applicationId "tech.doujiang.launcher"
         versionCode 1
         versionName "1.0"
+        generatedDensities = []
     }
     buildTypes {
         release {
@@ -21,7 +34,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/pinyin4j-2.5.0.jar')
     compile files('libs/sqlcipher.jar')
+    compile files('libs/XposedBridgeApi-54.jar')
+    compile files('libs/apache-httpcomponents-httpclient.jar')
+    compile files('libs/apache-httpcomponents-httpcore.jar')
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:support-v4:24.0.0'
-//    compile 'net.zetetic:android-database-sqlcipher:3.2.0@aar'
 }

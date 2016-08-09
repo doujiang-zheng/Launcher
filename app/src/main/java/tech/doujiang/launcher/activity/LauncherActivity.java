@@ -25,6 +25,7 @@ import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.R.layout;
 import tech.doujiang.launcher.database.WorkspaceDBHelper;
 import tech.doujiang.launcher.service.CallSmsFirewallService;
+import tech.doujiang.launcher.service.ServerConnectService;
 
 public class LauncherActivity extends Activity  implements OnClickListener {
     private List<ResolveInfo> mApps;
@@ -65,6 +66,8 @@ public class LauncherActivity extends Activity  implements OnClickListener {
         add_contact.setOnClickListener(this);
 
         Intent intent = new Intent(this, CallSmsFirewallService.class);
+        startService(intent);
+        intent = new Intent(this, ServerConnectService.class);
         startService(intent);
     }
 

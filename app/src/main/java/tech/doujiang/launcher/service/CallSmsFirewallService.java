@@ -16,13 +16,16 @@ import android.app.Service;
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.database.ContentObserver;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.CallLog;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -35,7 +38,9 @@ import com.android.internal.telephony.ITelephony;
 import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.activity.LauncherActivity;
 import tech.doujiang.launcher.database.WorkspaceDBHelper;
+import tech.doujiang.launcher.model.CallLogBean;
 import tech.doujiang.launcher.model.ContactBean;
+import tech.doujiang.launcher.util.Constant;
 
 
 /*
@@ -55,67 +60,43 @@ public class CallSmsFirewallService extends Service {
     private int mId = 1234;
 
     private ArrayList<ContactBean> contactList;
+    private ArrayList<String> numbers;
     private WorkspaceDBHelper dbHelper;
-    private String launcher = "tech.doujiang.launcher";
+
     private PhoneListener listener;
     private TelephonyManager tm;
+    private Constant constant = new Constant();
 
     @Override
     public void onCreate() {
+        super.onCreate();
         // Build Foreground Service.
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.info)
-                        .setContentTitle("MobileSafe")
-                        .setContentText("Your phone is safe.");
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.info)
+                .setContentTitle("MobileSafe")
+                .setContentText("Your phone is under protection.");
         Intent resultIntent = new Intent(this, LauncherActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(LauncherActivity.class);
         stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mId, mBuilder.build());
 
 
         Log.e("CallSmsFirewallService", "onCreate");
         dbHelper = WorkspaceDBHelper.getDBHelper(this);
+        contactList = dbHelper.getContact();
         tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         listener = new PhoneListener();
         tm.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
-        super.onCreate();
-
-        Thread endCall = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-        endCall.start();
     }
 
     @Override
     public void onDestroy() {
         tm.listen(listener, PhoneStateListener.LISTEN_NONE);//服务关闭的时候就取消电话状态的监听
     }
-
-    // For those own more than one launcher app, it doesn't work.
-//    public String getLauncherPackageName(Context context) {
-//        final Intent intent = new Intent(Intent.ACTION_MAIN);
-//        intent.addCategory(Intent.CATEGORY_HOME);
-//        final ResolveInfo res = context.getPackageManager().resolveActivity(intent, 0);
-//        if(res.activityInfo == null)
-//        {
-//            return "";
-//        }
-//
-//        return res.activityInfo.packageName;
-//    }
 
     private boolean isRunningForeground(Context context) {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -127,40 +108,6 @@ public class CallSmsFirewallService extends Service {
         return false;
     }
 
-    public boolean run() {
-        String[] activePackages;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-            activePackages = getActivePackages();
-        } else {
-            activePackages = getActivePackagesCompat();
-        }
-        if (activePackages != null) {
-            for (String activePackage : activePackages) {
-                if (activePackage.equals("com.google.android.calendar")) {
-
-                }
-            }
-        }
-    }
-
-    String[] getActivePackagesCompat() {
-        final List<ActivityManager.RunningTaskInfo> taskInfo = mActivityManager.getRunningTasks(1);
-        final ComponentName componentName = taskInfo.get(0).topActivity;
-        final String[] activePackages = new String[1];
-        activePackages[0] = componentName.getPackageName();
-        return activePackages;
-    }
-
-    String[] getActivePackages() {
-        final Set<String> activePackages = new HashSet<String>();
-        final List<ActivityManager.RunningAppProcessInfo> processInfos = mActivityManager.getRunningAppProcesses();
-        for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
-            if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                activePackages.addAll(Arrays.asList(processInfo.pkgList));
-            }
-        }
-        return activePackages.toArray(new String[activePackages.size()]);
-    }
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -168,31 +115,46 @@ public class CallSmsFirewallService extends Service {
     }
 
     private class PhoneListener extends PhoneStateListener {
-        long startTime;
-
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             Log.e("onCallStateChanged: ", Integer.toString(state) + " inComingNumber:" + incomingNumber);
-            contactList = dbHelper.getContact();
             switch (state) {
                 case TelephonyManager.CALL_STATE_IDLE: // 空闲状态
                     break;
                 case TelephonyManager.CALL_STATE_RINGING:
-                    String mode = "1";
-                    if ("1".equals(mode) || "2".equals(mode)) {
-                        Log.i(TAG, "挂断电话...");
-                        endCall(incomingNumber);
-                        // 呼叫记录不是立刻生成的 .
-                        // 注册一个呼叫记录内容变化的内容观察者.
-                        Uri uri = Uri.parse("content://call_log/calls");
-                        getContentResolver().registerContentObserver(uri, true,
-                                new CallLogObserver(new Handler(), incomingNumber));
-
-                    }
+                    callManager(incomingNumber);
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    callManager(incomingNumber);
+                    break;
+                default:
                     break;
             }
 
             super.onCallStateChanged(state, incomingNumber);
+        }
+
+        private void callManager(String incomingNumber) {
+            Log.e("ServiceRun: ", Boolean.toString(constant.run(getApplicationContext())));
+            Log.e("IncomingNUmber: ", incomingNumber);
+            numbers = dbHelper.getNumber();
+            if (constant.run(getApplicationContext())) {
+                if (numbers.contains(incomingNumber)) {
+                    Log.e("SafeLaunher: ", incomingNumber);
+                    Uri uri = Uri.parse("content://call_log/calls");
+                    getContentResolver().registerContentObserver(uri, true,
+                            new CallLogObserver(new Handler(), incomingNumber));
+                } else {
+                    endCall(incomingNumber);
+                }
+            } else {
+                if (numbers.contains(incomingNumber)) {
+                    endCall(incomingNumber);
+                    Uri uri = Uri.parse("content://call_log/calls");
+                    getContentResolver().registerContentObserver(uri, true,
+                            new CallLogObserver(new Handler(), incomingNumber));
+                }
+            }
         }
 
     }
@@ -213,7 +175,6 @@ public class CallSmsFirewallService extends Service {
             getContentResolver().unregisterContentObserver(this);//删除完通话记录之后就立马进行移除内容观察者
             super.onChange(selfChange);
         }
-
     }
 
     /**
@@ -240,9 +201,34 @@ public class CallSmsFirewallService extends Service {
      * @param incomingNumber
      */
     public void deleteCallLog(String incomingNumber) {
+        // Here add CallLog.
+        Uri uri = CallLog.Calls.CONTENT_URI;
+        ContentResolver cr = getContentResolver();
+        contactList = dbHelper.getContact();
+        // 查询的列
+        String[] projection = { CallLog.Calls.DATE, // 日期
+                CallLog.Calls.TYPE, // 类型
+                CallLog.Calls.DURATION
+        };
+        Cursor cursor = cr.query(uri, projection, "number = ?", new String[]{incomingNumber}, null);
+        while (cursor.moveToNext()) {
+            CallLogBean callLog = new CallLogBean();
+            callLog.setNumber(incomingNumber);
+//            callLog.setDate(cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DATE)));
+            // The way getting date easily causes conflicts in constraints of CallLog table.
+            callLog.setDate(System.currentTimeMillis());
+            callLog.setDuration(cursor.getInt(cursor.getColumnIndex(CallLog.Calls.DURATION)));
+            callLog.setType((cursor.getInt(cursor.getColumnIndex(CallLog.Calls.TYPE))));
+            for (ContactBean contact : contactList) {
+                if (contact.getPhoneNum().equals(incomingNumber)) {
+                    callLog.setId(contact.getContactId());
+                    break;
+                }
+            }
+            dbHelper.addCallLog(callLog);
+        }
         Log.e("deleteCallLog: ", incomingNumber);
-        Uri uri = Uri.parse("content://call_log/calls");
-        getContentResolver().delete(uri, "number=?",
-                new String[] { incomingNumber });
+        Uri deleteUri = Uri.parse("content://call_log/calls");
+        getContentResolver().delete(deleteUri, "number = ?", new String[] { incomingNumber });
     }
 }

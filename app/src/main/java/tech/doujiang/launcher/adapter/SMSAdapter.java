@@ -72,7 +72,7 @@ public class SMSAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.name.setText(smsList.get(position).getAddress());
+        holder.name.setText(smsList.get(position).getNumber());
         holder.count.setText("(" + smsList.get(position).getMsg_count() + ")");
 
         this.date.setTime(smsList.get(position).getDate());

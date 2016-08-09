@@ -132,8 +132,10 @@ public class RexseeSMS {
                 return list;
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
-                SMSBean mmt = new SMSBean(cursor.getString(0),
-                        cursor.getString(1), cursor.getString(2));
+                SMSBean mmt = new SMSBean();
+                mmt.setThread_id(cursor.getInt(0));
+                mmt.setMsg_count(cursor.getInt(1));
+                mmt.setMsg_snippet(cursor.getString(2));
                 list.add(mmt);
             }
             return list;
@@ -154,7 +156,7 @@ public class RexseeSMS {
             if (cursor == null || cursor.getCount() == 0)
                 return list;
             cursor.moveToFirst();
-            mmt.setAddress(cursor.getString(2));
+            mmt.setNumber(cursor.getString(2));
             mmt.setDate(cursor.getLong(4));
             mmt.setRead(cursor.getString(6));
             list.add(mmt);

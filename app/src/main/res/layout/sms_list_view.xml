@@ -4,29 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <SearchView
-            android:id="@+id/search"
-            android:layout_width="270dp"
-            android:layout_height="50dp"
-            android:iconifiedByDefault="false"
-            android:paddingLeft="20dp"
-            android:queryHint="@string/search_contact_hint">
-        </SearchView>
+        <!--<SearchView-->
+            <!--android:id="@+id/search"-->
+            <!--android:layout_width="270dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:iconifiedByDefault="false"-->
+            <!--android:paddingLeft="20dp"-->
+            <!--android:queryHint="@string/search_contact_hint">-->
+        <!--</SearchView>-->
 
         <ImageButton
             android:id="@+id/btn_new_msg"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:paddingLeft="10dp"
+            android:layout_alignParentRight="true"
             android:src="@drawable/edit"
             android:scaleType="fitCenter"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/sms_list"
