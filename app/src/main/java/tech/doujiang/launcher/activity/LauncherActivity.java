@@ -19,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import tech.doujiang.launcher.R;
@@ -34,7 +35,7 @@ public class LauncherActivity extends Activity  implements OnClickListener {
     GridView mGrid;
 
     private int PRIORITY = 100;
-    Button phone, message, db_interact, add_contact;
+    ImageButton phone, message, db_interact, add_contact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,31 +45,11 @@ public class LauncherActivity extends Activity  implements OnClickListener {
         setContentView(R.layout.activity_launcher);
         getForbiddenPackage();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PRIORITY);
-            requestPermissions(new String[]{Manifest.permission.READ_CALL_LOG}, PRIORITY);
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PRIORITY);
-            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PRIORITY);
-            requestPermissions(new String[]{Manifest.permission.READ_SMS}, PRIORITY);
-            requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS}, PRIORITY);
-            requestPermissions(new String[]{Manifest.permission.WRITE_CALL_LOG}, PRIORITY);
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PRIORITY);
-        }
-
-        phone = (Button) findViewById(R.id.phone_app);
-        message = (Button) findViewById(R.id.message_app);
-        db_interact = (Button) findViewById(R.id.db_test);
-        add_contact = (Button) findViewById(R.id.add_contact);
+        phone = (ImageButton) findViewById(R.id.phone_app);
+        message = (ImageButton) findViewById(R.id.message_app);
 
         phone.setOnClickListener(this);
         message.setOnClickListener(this);
-        db_interact.setOnClickListener(this);
-        add_contact.setOnClickListener(this);
-
-        Intent intent = new Intent(this, CallSmsFirewallService.class);
-        startService(intent);
-        intent = new Intent(this, ServerConnectService.class);
-        startService(intent);
     }
 
     @Override
@@ -81,10 +62,6 @@ public class LauncherActivity extends Activity  implements OnClickListener {
                 break;
             case R.id.message_app:
                 intent = new Intent(this, SMSListActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.add_contact:
-                intent = new Intent(this, AddContactActivity.class);
                 startActivity(intent);
                 break;
             default:

@@ -17,6 +17,14 @@
             <!--android:paddingLeft="20dp"-->
             <!--android:queryHint="@string/search_contact_hint">-->
         <!--</SearchView>-->
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:paddingLeft="50dp"
+            android:gravity="center_vertical"
+            android:text="@string/message"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
 
         <ImageButton
             android:id="@+id/btn_new_msg"

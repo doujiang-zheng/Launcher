@@ -13,10 +13,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.database.WorkspaceDBHelper;
 import tech.doujiang.launcher.fragment.ContactListFragment;
 import tech.doujiang.launcher.model.ContactBean;
+import tech.doujiang.launcher.model.SMSBean;
+import tech.doujiang.launcher.util.BaseIntentUtil;
 
 public class ContactDetailActivity extends AppCompatActivity {
     private int position;
@@ -50,6 +55,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         }
         contactName.setText(contact.getDisplayName());
         contactNum.setText(contact.getPhoneNum());
+        Log.e("ContactDetail: ", Integer.toString(contact.getContactId()));
         deleteContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,10 +73,12 @@ public class ContactDetailActivity extends AppCompatActivity {
         ll_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ContactDetailActivity.this, SendSmsActivity.class);
-                intent.putExtra("name", contact.getDisplayName());
-                intent.putExtra("num", contact.getPhoneNum());
-                startActivity(intent);
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("threadId", Integer.toString(contact.getContactId()));
+                map.put("name", contact.getDisplayName());
+                map.put("number", contact.getPhoneNum());
+                BaseIntentUtil.intentSysDefault(ContactDetailActivity.this,
+                        MessageBoxListActivity.class, map);
             }
         });
     }

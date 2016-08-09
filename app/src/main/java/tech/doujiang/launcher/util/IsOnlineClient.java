@@ -20,11 +20,11 @@ import java.util.List;
 /**
  * Created by Grinch on 16/8/8.
  */
-public class IsOnlineClient {
+public class IsonlineClient {
 
     public static String connectionurl = "http://169.229.85.113:8080/YunMobileSafe/Isonline";
 
-     public IsOnlineClient() {
+     public IsonlineClient() {
     }
 
     public void onlineconnect(String username, boolean online, boolean infoerase, boolean islost, double longitude, double latitude) {

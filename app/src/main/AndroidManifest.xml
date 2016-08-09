@@ -33,6 +33,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="IvtLyoPAFqGcFA9flvLGj1Z1QKxfAeoe" />       //key:开发者申请的key
+
+
         <service
             android:name=".service.CallSmsFirewallService"
             android:enabled="true"
@@ -40,13 +46,13 @@
 
         <activity android:name=".activity.LauncherActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MessageBoxList" />
+        <activity android:name=".activity.MessageBoxListActivity" />
         <activity android:name=".activity.SMSListActivity" />
 
         <receiver
@@ -113,15 +119,21 @@
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SplashActivity">
-        </activity>
+        <activity android:name=".activity.SplashActivity" />
 
         <service
             android:name=".service.ServerConnectService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.ReportLocationService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.RequestFileService"
             android:enabled="true"
             android:exported="true">
         </service>

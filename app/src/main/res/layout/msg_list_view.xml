@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:orientation="horizontal"
@@ -19,10 +19,11 @@
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_toRightOf="@id/btn_go_back"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:drawablePadding="10dip"
+            android:gravity="center_horizontal"
             android:textSize="20sp"
             android:textColor="#333333" />
 
@@ -30,10 +31,11 @@
             android:id="@+id/btn_call"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_alignParentRight="true"
             android:src="@drawable/phone"
             android:scaleType="centerInside"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/message_list"
@@ -60,7 +62,7 @@
             android:maxLines="2"/>
 
         <ImageButton
-            android:id="@+id/send"
+            android:id="@+id/send_msg"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/send_msg"

@@ -36,7 +36,7 @@ public class Loginprocess {
 
     public static boolean networktest() {
         try {
-            connectionurl = "http://169.229.85.113:8080/YunMobileSafe/Userconfirm";
+            connectionurl = "http://23.83.251.48:8080/YunMobileSafe/Userconfirm";
             Log.v("Loginprocess", "networktest");
             connectionurl += "?networktest=test";
             Log.v("URL", connectionurl);
@@ -69,7 +69,7 @@ public class Loginprocess {
     public boolean confirm() {
         String username = myinfo.getUsername();
         String psw = myinfo.getPsw();
-        connectionurl = "http://169.229.85.113:8080/YunMobileSafe/Userconfirm";
+        connectionurl = "http://23.83.251.48:8080/YunMobileSafe/Userconfirm";
         try {
 			/*
 			 * Map<String, String> params = new HashMap<String, String>();

@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.model.MessageBean;
+import tech.doujiang.launcher.util.Constant;
 
 /**
  * Created by 豆浆 on 2016-07-12.
@@ -31,6 +32,7 @@ public class MessageBoxListAdapter extends BaseAdapter{
     private List<MessageBean> mbList;
     private Context ctx;
     private LinearLayout layout_father;
+    private Constant constant;
     private LayoutInflater vi;
     private LinearLayout layout_child;
     private TextView tvDate;
@@ -41,6 +43,7 @@ public class MessageBoxListAdapter extends BaseAdapter{
         vi = (LayoutInflater) ctx
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mbList = coll;
+        this.constant = new Constant();
     }
 
     public int getCount() {
@@ -58,7 +61,12 @@ public class MessageBoxListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
 
         MessageBean mb = mbList.get(position);
-        int itemLayout = mb.getType();
+        int itemLayout;
+        if (mb.getType() == constant.LAYOUT_INCOMING) {
+            itemLayout = R.layout.list_say_he_item;
+        } else {
+            itemLayout = R.layout.list_say_me_item;
+        }
         layout_father = new LinearLayout(ctx);
         vi.inflate(itemLayout, layout_father, true);
 
@@ -118,7 +126,7 @@ public class MessageBoxListAdapter extends BaseAdapter{
         });
     }
 
-    private String[] newtan = new String[] { "", "", "", "" };
+    private String[] newtan = new String[] { "cut", "copy", "paste", "select all" };
 
     private void showListDialog(final String[] arg, final MessageBean mb) {
         new AlertDialog.Builder(ctx).setTitle("")

@@ -10,7 +10,9 @@ import android.telecom.Call;
 import android.util.Log;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import tech.doujiang.launcher.model.CallLogBean;
@@ -33,26 +35,26 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
     private static WorkspaceDBHelper dbHelper;
     private static final String CREATE_CONTACT = "create table Contact("
             + "id integer primary key autoincrement,"
-            + "name string,"
-            + "number string,"
+            + "name string not null,"
+            + "number string not null,"
             + "photoPath string,"
-            + "email string,"
-            + "pinYin string"
+            + "email string not null,"
+            + "pinYin string not null"
             + ");";
     private static final String CREATE_CALLLOG = "create table CallLog("
-            + "id integer,"
-            + "date integer,"
-            + "duration integer,"
-            + "type integer," // 1. INCOMING_TYPE 2. OUTGOING_TYPE 3. MISSED_TYPE
-            + "isRead integer,"
+            + "id integer not null,"
+            + "date integer not null,"
+            + "duration integer not null,"
+            + "type integer not null," // 1. INCOMING_TYPE 2. OUTGOING_TYPE 3. MISSED_TYPE
+            + "isRead integer not null,"
             + "primary key(id, date, duration, type),"
             + "foreign key(id) references Contact(id)"
             + " );";
     private static final String CREATE_MESSAGE = "create table Message("
-            + "id integer, "
-            + "date integer,"
-            + "text integer,"
-            + "type integer," // 1. INCOMING_TYPE 2. OUTGOING_TYPE
+            + "id integer not null, "
+            + "date integer not null,"
+            + "text integer not null,"
+            + "type integer not null," // 1. INCOMING_TYPE 2. OUTGOING_TYPE
             + "primary key(id, date, text, type),"
             + "foreign key(id) references Contact(id)"
             + ")";
@@ -104,9 +106,10 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase(key);
         db.beginTransaction();
         try {
-            db.execSQL("INSERT INTO CallLog(id, date, duration, type) VALUES(?, ?, ?, ?)",
+            db.execSQL("INSERT INTO CallLog(id, date, duration, type, isRead) VALUES(?, ?, ?, ?, ?)",
                     new String[]{Integer.toString(callLog.getId()), Long.toString(callLog.getDate())
-                            ,Integer.toString(callLog.getDuration()), Integer.toString(callLog.getType())});
+                            ,Integer.toString(callLog.getDuration()), Integer.toString(callLog.getType())
+                            ,Integer.toString(callLog.isRead())});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -119,7 +122,8 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             db.execSQL("INSERT INTO Message(id, date, text, type) VALUES(?, ?, ?, ?)",
-                    new Object[]{message.getId(), message.getDate(), message.getText(), message.getType()});
+                    new String[]{Integer.toString(message.getId()), Long.toString(message.getDate()),
+                            message.getText(), Integer.toString(message.getType())});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -130,7 +134,6 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
     public ArrayList<ContactBean> getContact() {
         ArrayList<ContactBean> contacts = new ArrayList<ContactBean>();
         Cursor cursor = this.getWritableDatabase(key).rawQuery("select * from Contact order by pinYin asc", null);
-//        Cursor cursor = this.getWritableDatabase(key).rawQuery("select * from Contact where id = ?", new String[]{"5"});
         while (cursor.moveToNext()) {
             ContactBean contact = new ContactBean();
             contact.setContactId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -177,11 +180,14 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
 
     public ArrayList<SMSBean> getSMS() {
         ArrayList<SMSBean> sms = new ArrayList<SMSBean>();
-        Cursor cursor = this.getWritableDatabase(key).rawQuery("SELECT id, number, count(*) AS count, date, text " +
-                " FROM Message LEFT OUTER JOIN Contact GROUP BY id ORDER BY date DESC", null);
+        Cursor cursor = this.getWritableDatabase(key).rawQuery(
+                " SELECT Contact.id AS cid, name, number, count(*) AS count, date, text "
+                        + " FROM Contact LEFT OUTER JOIN Message ON Contact.id = Message.id "
+                        + " GROUP BY Contact.id", null);
         while (cursor.moveToNext()) {
             SMSBean smsBean = new SMSBean();
-            smsBean.setThread_id(cursor.getInt(cursor.getColumnIndex("id")));
+            smsBean.setThread_id(cursor.getInt(cursor.getColumnIndex("cid")));
+            smsBean.setName(cursor.getString(cursor.getColumnIndex("name")));
             smsBean.setNumber(cursor.getString(cursor.getColumnIndex("number")));
             smsBean.setMsg_count(cursor.getInt(cursor.getColumnIndex("count")));
             smsBean.setDate(cursor.getLong(cursor.getColumnIndex("date")));
@@ -193,13 +199,18 @@ public class WorkspaceDBHelper extends SQLiteOpenHelper {
         return sms;
     }
 
-    public ArrayList<MessageBean> getMessage() {
+    public ArrayList<MessageBean> getMessage(String id) {
         ArrayList<MessageBean> messages = new ArrayList<MessageBean>();
-        Cursor cursor = this.getWritableDatabase(key).rawQuery("SELECT * FROM Message LEFT OUTER JOIN Contact ORDER BY date DESC", null);
+        Cursor cursor = this.getWritableDatabase(key).rawQuery(
+                " SELECT Contact.id as cid, name, number, date, text, type "
+                        + "FROM Contact LEFT OUTER JOIN Message "
+                        + " ON Contact.id = Message.id "
+                        + " WHERE Contact.id = ? ORDER BY date ASC", new String[]{id});
         while (cursor.moveToNext()) {
             MessageBean message = new MessageBean();
-            message.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            message.setId(cursor.getInt(cursor.getColumnIndex("cid")));
             message.setName(cursor.getString(cursor.getColumnIndex("name")));
+            message.setNumber(cursor.getString(cursor.getColumnIndex("number")));
             message.setDate(cursor.getLong(cursor.getColumnIndex("date")));
             message.setText(cursor.getString(cursor.getColumnIndex("text")));
             message.setType(cursor.getInt(cursor.getColumnIndex("type")));

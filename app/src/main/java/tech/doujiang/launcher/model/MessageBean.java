@@ -7,6 +7,7 @@ public class MessageBean {
 
     private int id;
     private String name;
+    private String number;
     private Long date;
     private String text;
     private int type;   // 1 means incoming, 2 means outgoing
@@ -61,5 +62,13 @@ public class MessageBean {
 
     public void setDate(Long date) {
         this.date = date;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

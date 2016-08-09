@@ -8,6 +8,7 @@ public class SMSBean {
     private int thread_id;
     private int msg_count;
     private String msg_snippet;
+    private String name;
     private String number;
     private Long date;
     private String read;
@@ -39,14 +40,6 @@ public class SMSBean {
         msg_snippet = msgSnippet;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
     public int getThread_id() {
         return thread_id;
     }
@@ -61,5 +54,21 @@ public class SMSBean {
 
     public void setMsg_count(int msg_count) {
         this.msg_count = msg_count;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

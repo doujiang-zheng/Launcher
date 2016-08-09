@@ -180,7 +180,6 @@ public class AddContactActivity extends AppCompatActivity implements OnClickList
         }
         contact.setDisplayName(contactName.getText().toString());
         contact.setPhoneNum(contactNum.getText().toString());
-
         String name = contactName.getText().toString();
         StringBuilder sb = new StringBuilder();
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
@@ -201,6 +200,7 @@ public class AddContactActivity extends AppCompatActivity implements OnClickList
                 sb.append(vals[0]);
             }
         }
+        contact.setEmail(contactEmail.getText().toString());
         String pinYin = sb.toString().toUpperCase();
         contact.setPinYin(pinYin);
         dbHelper.addContact(contact);

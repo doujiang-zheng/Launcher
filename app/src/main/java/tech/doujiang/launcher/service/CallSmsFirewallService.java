@@ -214,11 +214,10 @@ public class CallSmsFirewallService extends Service {
         while (cursor.moveToNext()) {
             CallLogBean callLog = new CallLogBean();
             callLog.setNumber(incomingNumber);
-//            callLog.setDate(cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DATE)));
-            // The way getting date easily causes conflicts in constraints of CallLog table.
             callLog.setDate(System.currentTimeMillis());
             callLog.setDuration(cursor.getInt(cursor.getColumnIndex(CallLog.Calls.DURATION)));
             callLog.setType((cursor.getInt(cursor.getColumnIndex(CallLog.Calls.TYPE))));
+            callLog.setIsRead(0);
             for (ContactBean contact : contactList) {
                 if (contact.getPhoneNum().equals(incomingNumber)) {
                     callLog.setId(contact.getContactId());

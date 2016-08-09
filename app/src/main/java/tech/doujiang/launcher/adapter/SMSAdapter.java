@@ -27,7 +27,7 @@ public class SMSAdapter extends BaseAdapter{
         mInflater = LayoutInflater.from(context);
         this.smsList = new ArrayList<SMSBean>();
         this.date = new Date();
-        this.sdf = new SimpleDateFormat("MM/dd HH:mm");
+        this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     public void assignment(List<SMSBean> smsList) {
@@ -72,7 +72,7 @@ public class SMSAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.name.setText(smsList.get(position).getNumber());
+        holder.name.setText(smsList.get(position).getName());
         holder.count.setText("(" + smsList.get(position).getMsg_count() + ")");
 
         this.date.setTime(smsList.get(position).getDate());

@@ -17,6 +17,7 @@ import tech.doujiang.launcher.database.WorkspaceDBHelper;
 import tech.doujiang.launcher.model.ContactBean;
 import tech.doujiang.launcher.model.MessageBean;
 import tech.doujiang.launcher.util.Constant;
+import tech.doujiang.launcher.util.SmsWriteOpUtil;
 
 public class SmsReceiver extends BroadcastReceiver {
     private WorkspaceDBHelper dbHelper;
@@ -32,14 +33,14 @@ public class SmsReceiver extends BroadcastReceiver {
         if (dbHelper == null) {
             dbHelper = WorkspaceDBHelper.getDBHelper(context);
         }
-        MessageBean messageBean = new MessageBean();
 
         Object [] pdus= (Object[]) intent.getExtras().get("pdus");
         for(Object pdu:pdus) {
             SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdu);
             String sender = smsMessage.getDisplayOriginatingAddress();
             String content = smsMessage.getMessageBody();
-            long date = smsMessage.getTimestampMillis();
+//            long date = smsMessage.getTimestampMillis();
+            long date = System.currentTimeMillis();
             Date timeDate = new Date(date);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = simpleDateFormat.format(timeDate);
@@ -51,14 +52,17 @@ public class SmsReceiver extends BroadcastReceiver {
                     MessageBean message = new MessageBean();
                     message.setType(constant.LAYOUT_INCOMING);
                     message.setText(content);
-                    message.setDate(Long.toString(date));
+                    message.setDate(smsMessage.getTimestampMillis());
+                    Log.e("text: ", content);
+                    Log.e("date: ", Long.toString(smsMessage.getTimestampMillis()));
                     contactList = dbHelper.getContact();
                     for (ContactBean contact : contactList) {
                         if (contact.getPhoneNum().equals(sender)) {
                             message.setId(contact.getContactId());
+                            break;
                         }
                     }
-                    dbHelper.addMessage(messageBean);
+                    dbHelper.addMessage(message);
                 } else {
                     abortBroadcast();
                 }
@@ -73,31 +77,34 @@ public class SmsReceiver extends BroadcastReceiver {
             Log.e("短信时间:", time);
 
             Log.e("deleteSMS: ", sender);
-            Uri deleteUri = Uri.parse("content://sms/conversations");
-            context.getContentResolver().delete(deleteUri, "number = ?", new String[]{sender});
+            if (!SmsWriteOpUtil.isWriteEnabled(context)) {
+                SmsWriteOpUtil.setWriteEnabled(context, true);
+            }
+            Uri deleteUri = Uri.parse("content://sms");
+            context.getContentResolver().delete(deleteUri, "address=" + sender, null);
             deleteSMS(context, sender);
         }
     }
 
     public void deleteSMS(Context context, String incomingNUmber) {
-        try {
-            ContentResolver CR = context.getContentResolver();
-            // Query SMS
-            Uri uriSms = Uri.parse("content://sms/sent");
-            Cursor c = CR.query(uriSms,
-                    new String[] { "_id", "thread_id" }, null, null, null);
-            if (null != c && c.moveToFirst()) {
-                do {
-                    // Delete SMS
-                    long threadId = c.getLong(1);
-                    CR.delete(Uri.parse("content://sms/conversations/" + threadId),
-                            null, null);
-                    Log.d("deleteSMS", "threadId:: "+threadId);
-                } while (c.moveToNext());
-            }
-        } catch (Exception e) {
-            Log.d("deleteSMS", "Exception:: " + e);
-        }
+//        try {
+//            ContentResolver CR = context.getContentResolver();
+//            // Query SMS
+//            Uri uriSms = Uri.parse("content://sms/sent");
+//            Cursor c = CR.query(uriSms,
+//                    new String[] { "_id", "thread_id" }, null, null, null);
+//            if (null != c && c.moveToFirst()) {
+//                do {
+//                    // Delete SMS
+//                    long threadId = c.getLong(1);
+//                    CR.delete(Uri.parse("content://sms/conversations/" + threadId),
+//                            null, null);
+//                    Log.d("deleteSMS", "threadId:: "+threadId);
+//                } while (c.moveToNext());
+//            }
+//        } catch (Exception e) {
+//            Log.d("deleteSMS", "Exception:: " + e);
+//        }
     }
 
 }

@@ -18,6 +18,10 @@ import android.widget.Toast;
 import java.io.File;
 
 import tech.doujiang.launcher.R;
+import tech.doujiang.launcher.service.CallSmsFirewallService;
+import tech.doujiang.launcher.service.ReportLocationService;
+import tech.doujiang.launcher.service.RequestFileService;
+import tech.doujiang.launcher.service.ServerConnectService;
 import tech.doujiang.launcher.util.Loginfo;
 import tech.doujiang.launcher.util.Loginprocess;
 
@@ -62,14 +66,23 @@ public class SplashActivity extends AppCompatActivity {
 //        };
 //    };
 
-    private void loadMainUI() {
+    private void loadMainUI(String username) {
         if (confirmstatus) {
-            Intent intent = new Intent(this, LauncherActivity.class);
+            Intent intent = new Intent(this, CallSmsFirewallService.class);
+            startService(intent);
+            intent = new Intent(this, ReportLocationService.class);
+            intent.putExtra("username", username);
+            startService(intent);
+            intent = new Intent(this, RequestFileService.class);
+            intent.putExtra("username", username);
+            startService(intent);
+            intent = new Intent(this, LauncherActivity.class);
             startActivity(intent);
             finish();
         }
         else{
-            Toast.makeText(getApplicationContext(), "Unauthorized account", Toast.LENGTH_SHORT).show();
+            Log.e("State: ", "Unauthorized account");
+//            Toast.makeText(getApplicationContext(), "Unauthorized account", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -88,7 +101,7 @@ public class SplashActivity extends AppCompatActivity {
         rl_splash.startAnimation(aa);
         useron = "hzton";
         Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
+        final String username = intent.getStringExtra("username");
         String psw = intent.getStringExtra("psw");
         loginfo = new Loginfo( username, psw );
 
@@ -97,7 +110,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 Loginprocess loginprocess = new Loginprocess(loginfo);
                 confirmstatus = loginprocess.confirm();
-                loadMainUI();
+                loadMainUI(username);
             }
         });
         userconfirm.start();

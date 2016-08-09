@@ -5,15 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import tech.doujiang.launcher.R;
-import tech.doujiang.launcher.util.IsOnlineClient;
+import tech.doujiang.launcher.util.IsonlineClient;
 import tech.doujiang.launcher.util.Loginprocess;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -84,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onClick(View v) {
-//                     IsOnlineClient isonlineClient = new IsOnlineClient();
+//                     IsonlineClient isonlineClient = new IsonlineClient();
 //                     isonlineClient.offlineconnect(etAccount.getText().toString(),false);
 //                    serverconnectconfig.setisonline(false);
                     System.exit(0);

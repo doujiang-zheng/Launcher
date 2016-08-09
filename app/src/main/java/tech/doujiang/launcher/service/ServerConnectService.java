@@ -5,16 +5,13 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 
 import java.util.List;
@@ -23,7 +20,7 @@ import java.util.TimerTask;
 
 import tech.doujiang.launcher.R;
 import tech.doujiang.launcher.activity.LauncherActivity;
-import tech.doujiang.launcher.util.IsOnlineClient;
+import tech.doujiang.launcher.util.IsonlineClient;
 import tech.doujiang.launcher.util.HttpThread;
 
 public class ServerConnectService extends Service {
@@ -38,27 +35,6 @@ public class ServerConnectService extends Service {
     private double longitude = 0.0;
     private double latitude = 0.0;
     private int mId = 1235;
-
-//    LocationListener locationListener = new LocationListener() {
-//        @Override
-//        public void onStatusChanged(String provider, int status, Bundle extras) {
-//        }
-//
-//        @Override
-//        public void onProviderEnabled(String provider) {
-//        }
-//
-//        @Override
-//        public void onProviderDisabled(String provider) {
-//        }
-//
-//        @Override
-//        public void onLocationChanged(Location location) {
-//            longitude = location.getLongitude();
-//            latitude = location.getLatitude();
-//            Log.d(TAG, "Location longitude:" + longitude + " latitude: " + latitude);
-//        }
-//    };
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -81,15 +57,6 @@ public class ServerConnectService extends Service {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mId, mBuilder.build());
 
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        Criteria criteria = new Criteria();
-//        criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
-//        criteria.setAltitudeRequired(false);
-//        criteria.setBearingRequired(false);
-//        criteria.setCostAllowed(true);
-//        criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
-//        String provider =locationManager.getBestProvider(criteria, true);
-//        locationManager.requestLocationUpdates(provider, 5 * 1000, 1, locationListener);
         super.onCreate();
         Log.v(TAG, "ServerConnectService is Created");
 
@@ -136,13 +103,19 @@ public class ServerConnectService extends Service {
 
         @Override
         public void run() {
+            TelephonyManager tm=(TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+            GsmCellLocation gcl=(GsmCellLocation) tm.getCellLocation();
+            int cid=gcl.getCid();
+            int lac=gcl.getLac();
+            int mcc = Integer.valueOf(tm.getNetworkOperator().substring(0, 3));
+            int mnc = Integer.valueOf(tm.getNetworkOperator().substring(3,5));
 
             Location myloc = getLocation();
 //            Log.v("ServerConnectService","Location " + myloc.equals(null));
             if( myloc != null ){
                 longitude = myloc.getLongitude();
                 latitude = myloc.getLatitude();
-                IsOnlineClient isonlineClient = new IsOnlineClient();
+                IsonlineClient isonlineClient = new IsonlineClient();
                 isonlineClient.onlineconnect(username, isonline,  infoerase, islost, longitude, latitude);
                 Log.e("ServerConnectService", "send information");
             }else{

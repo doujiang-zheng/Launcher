@@ -156,7 +156,7 @@ public class RexseeSMS {
             if (cursor == null || cursor.getCount() == 0)
                 return list;
             cursor.moveToFirst();
-            mmt.setNumber(cursor.getString(2));
+            mmt.setName(cursor.getString(2));
             mmt.setDate(cursor.getLong(4));
             mmt.setRead(cursor.getString(6));
             list.add(mmt);
